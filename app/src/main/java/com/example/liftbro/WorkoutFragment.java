@@ -1,16 +1,18 @@
 package com.example.liftbro;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,12 +38,24 @@ public class WorkoutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Set up recycler view
         View view = inflater.inflate(R.layout.fragment_workout, container, false);
         RecyclerView rvWorkouts = (RecyclerView)view.findViewById(R.id.rv_workouts);
         GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
         rvWorkouts.setLayoutManager(glm);
-        WorkoutAdapter adapter = new WorkoutAdapter(dummyWorkouts);
+        WorkoutAdapter adapter = new WorkoutAdapter(getActivity(), dummyWorkouts);
         rvWorkouts.setAdapter(adapter);
+
+        // Hook up FAB
+        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab_add_workout);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: Launch Add Workout dialog
+                Toast.makeText(getContext(), "Clicked Add Workout FAB", Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
