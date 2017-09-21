@@ -18,32 +18,37 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (findViewById(R.id.fragment_container) != null) {
-
-            // If restoring, return to prevent overlapping fragments
-            if (savedInstanceState != null) {
-                return;
+            if (savedInstanceState == null) {
+                // Add workout fragment to fragment container
+                WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, workoutFragment).commit();
             }
+        }
 
-            // Add workout fragment to fragment container
-            WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, workoutFragment).commit();
-
-            getSupportFragmentManager().addOnBackStackChangedListener(
-                    new FragmentManager.OnBackStackChangedListener() {
-                        @Override
-                        public void onBackStackChanged() {
-                            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                                getSupportActionBar().setHomeButtonEnabled(true);
-                            }
-                            else {
-                                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                            }
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    @Override
+                    public void onBackStackChanged() {
+                        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                            getSupportActionBar().setHomeButtonEnabled(true);
+                        }
+                        else {
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                         }
                     }
-            );
+                }
+        );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
         }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
