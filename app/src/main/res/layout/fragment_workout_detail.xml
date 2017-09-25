@@ -12,6 +12,37 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp" />
 
-    <!-- Timer -->
-
+    <LinearLayout
+        android:id="@+id/ll_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/black"
+        android:padding="16dp"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_green_light"
+            android:text="START" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:text="00:00" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_red_light"
+            android:text="STOP" />
+    </LinearLayout>
 </RelativeLayout>
