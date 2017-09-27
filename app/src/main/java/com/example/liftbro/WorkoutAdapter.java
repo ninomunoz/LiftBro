@@ -38,12 +38,13 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     @Override
     public void onBindViewHolder(WorkoutViewHolder holder, int position) {
-        holder.workoutName.setText(mWorkouts.get(position));
+        final String workoutName = mWorkouts.get(position);
+        holder.workoutName.setText(workoutName);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: Specify workout to show with fragment args
-                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance();
+                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutName);
                 FragmentTransaction transaction = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);

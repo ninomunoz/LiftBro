@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,8 @@ public class WorkoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        updateToolbar();
+
         // Set up recycler view
         View view = inflater.inflate(R.layout.fragment_workout, container, false);
         RecyclerView rvWorkouts = (RecyclerView)view.findViewById(R.id.rv_workouts);
@@ -66,4 +69,8 @@ public class WorkoutFragment extends Fragment {
         super.onDetach();
     }
 
+    private void updateToolbar() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar()
+                .setTitle(getString(R.string.app_name));
+    }
 }
