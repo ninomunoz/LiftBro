@@ -1,4 +1,4 @@
-package com.example.liftbro;
+package com.example.liftbro.adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.liftbro.MainActivity;
+import com.example.liftbro.R;
+import com.example.liftbro.fragment.WorkoutDetailFragment;
 
 import java.util.List;
 
@@ -20,7 +24,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     List<String> mWorkouts;
     Context mContext;
 
-    WorkoutAdapter(Context context, List<String> workouts) {
+    public WorkoutAdapter(Context context, List<String> workouts) {
         mContext = context;
         mWorkouts = workouts;
     }

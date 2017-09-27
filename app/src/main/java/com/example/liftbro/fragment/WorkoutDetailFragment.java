@@ -1,4 +1,4 @@
-package com.example.liftbro;
+package com.example.liftbro.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.liftbro.Exercise;
+import com.example.liftbro.adapter.ExerciseAdapter;
+import com.example.liftbro.R;
 
 import java.util.Arrays;
 import java.util.List;

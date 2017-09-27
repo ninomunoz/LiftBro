@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.liftbro.fragment.WorkoutFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
