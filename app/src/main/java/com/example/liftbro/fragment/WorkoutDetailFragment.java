@@ -30,6 +30,7 @@ public class WorkoutDetailFragment extends Fragment {
     private ExerciseAdapter mAdapter;
     private FloatingActionButton mFab;
     private LinearLayout llTimer;
+    private boolean mEditMode = false;
 
     public WorkoutDetailFragment() {
         // Required empty public constructor
@@ -74,6 +75,13 @@ public class WorkoutDetailFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_detail, menu);
+
+        if (mEditMode) {
+            for (int i = 0; i < menu.size(); i++) {
+                menu.getItem(i).setVisible(false);
+            }
+        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -81,10 +89,7 @@ public class WorkoutDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miEdit:
-                llTimer.setVisibility(View.GONE);
-                mAdapter.setEditMode(true);
-                rvExercises.setAdapter(mAdapter);
-                mFab.setVisibility(View.VISIBLE);
+                toggleEditMode(true);
                 return true;
             case R.id.miShare:
                 // TODO: Share workout
@@ -98,6 +103,25 @@ public class WorkoutDetailFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void toggleEditMode(boolean isEditing) {
+        mEditMode = isEditing;
+
+        if (mEditMode) {
+            llTimer.setVisibility(View.GONE);
+            mAdapter.setEditMode(mEditMode);
+            rvExercises.setAdapter(mAdapter);
+            mFab.setVisibility(View.VISIBLE);
+        }
+        else {
+            llTimer.setVisibility(View.VISIBLE);
+            mAdapter.setEditMode(mEditMode);
+            rvExercises.setAdapter(mAdapter);
+            mFab.setVisibility(View.GONE);
+        }
+
+        getActivity().invalidateOptionsMenu();
     }
 
     private void updateToolbar() {
