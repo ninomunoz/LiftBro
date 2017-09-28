@@ -13,35 +13,34 @@ import com.example.liftbro.R;
 import java.util.List;
 
 /**
- * Created by i57198 on 9/17/17.
+ * Created by i57198 on 9/28/17.
  */
 
-public class ExerciseAdapter extends
-        RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
+public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapter.ViewHolder> {
 
     private List<Exercise> mExercises;
     private Context mContext;
 
-    public ExerciseAdapter(Context context, List<Exercise> exercises) {
+    public EditExerciseAdapter(Context context, List<Exercise> exercises) {
         mContext = context;
         mExercises = exercises;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public EditExerciseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View exerciseView = inflater.inflate(R.layout.item_exercise, parent, false);
+        View exerciseView = inflater.inflate(R.layout.item_edit_exercise, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(exerciseView);
+        EditExerciseAdapter.ViewHolder viewHolder = new EditExerciseAdapter.ViewHolder(exerciseView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(EditExerciseAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
         Exercise exercise = mExercises.get(position);
         int sets = exercise.getSets();
@@ -105,7 +104,6 @@ public class ExerciseAdapter extends
 
         return formattedSetsReps;
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvExerciseName;

@@ -1,8 +1,8 @@
 package com.example.liftbro.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,32 +10,29 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.liftbro.Exercise;
-import com.example.liftbro.MainActivity;
-import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
+import com.example.liftbro.adapter.EditExerciseAdapter;
+import com.example.liftbro.adapter.ExerciseAdapter;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class WorkoutDetailFragment extends Fragment {
+public class EditWorkoutFragment extends Fragment {
 
     private static final String ARG_TITLE_KEY = "title";
 
     private String mTitle;
-    private RecyclerView rvExercises;
-    private ExerciseAdapter mAdapter;
 
-    public WorkoutDetailFragment() {
+    public EditWorkoutFragment() {
         // Required empty public constructor
     }
 
-    public static WorkoutDetailFragment newInstance(String title) {
-        WorkoutDetailFragment frag = new WorkoutDetailFragment();
+    public static EditWorkoutFragment newInstance(String title) {
+        EditWorkoutFragment frag = new EditWorkoutFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE_KEY, title);
         frag.setArguments(args);
@@ -43,7 +40,7 @@ public class WorkoutDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         mTitle = getArguments().getString(ARG_TITLE_KEY);
         super.onCreate(savedInstanceState);
     }
@@ -52,16 +49,17 @@ public class WorkoutDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_workout_detail, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_edit_workout, container, false);
         updateToolbar();
 
         // Set up recycler view
-        rvExercises = (RecyclerView)view.findViewById(R.id.rv_exercises);
+        RecyclerView rvExercises = (RecyclerView)view.findViewById(R.id.rv_exercises);
         LinearLayoutManager glm = new LinearLayoutManager(getActivity());
         rvExercises.setLayoutManager(glm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
-        mAdapter = new ExerciseAdapter(getContext(), getDummyExercises());
-        rvExercises.setAdapter(mAdapter);
+        EditExerciseAdapter adapter = new EditExerciseAdapter(getContext(), getDummyExercises());
+        rvExercises.setAdapter(adapter);
 
         return view;
     }
@@ -69,33 +67,7 @@ public class WorkoutDetailFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_detail, menu);
-
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.miEdit:
-                EditWorkoutFragment frag = EditWorkoutFragment.newInstance(mTitle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, frag);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                return true;
-            case R.id.miShare:
-                // TODO: Share workout
-                return true;
-            case R.id.miDelete:
-                // TODO: Delete workout
-                return true;
-            case R.id.miRename:
-                // TODO: Rename workout
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void updateToolbar() {
