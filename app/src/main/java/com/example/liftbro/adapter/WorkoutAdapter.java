@@ -47,7 +47,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Specify workout to show with fragment args
                 WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutName);
                 FragmentTransaction transaction = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);

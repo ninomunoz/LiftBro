@@ -1,6 +1,7 @@
 package com.example.liftbro.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -9,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.liftbro.Exercise;
 import com.example.liftbro.adapter.ExerciseAdapter;
@@ -23,6 +26,10 @@ public class WorkoutDetailFragment extends Fragment {
 
     private static final String ARG_TITLE_KEY = "title";
     private String mTitle;
+    private RecyclerView rvExercises;
+    private ExerciseAdapter mAdapter;
+    private FloatingActionButton mFab;
+    private LinearLayout llTimer;
 
     public WorkoutDetailFragment() {
         // Required empty public constructor
@@ -47,15 +54,18 @@ public class WorkoutDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_workout_detail, container, false);
+        mFab = (FloatingActionButton)view.findViewById(R.id.fab_add_exercise);
+        mFab.setVisibility(View.GONE);
+        llTimer = (LinearLayout)view.findViewById(R.id.ll_timer);
         updateToolbar();
 
         // Set up recycler view
-        RecyclerView rvExercises = (RecyclerView)view.findViewById(R.id.rv_exercises);
+        rvExercises = (RecyclerView)view.findViewById(R.id.rv_exercises);
         LinearLayoutManager glm = new LinearLayoutManager(getActivity());
         rvExercises.setLayoutManager(glm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
-        ExerciseAdapter adapter = new ExerciseAdapter(getContext(), getDummyExercises());
-        rvExercises.setAdapter(adapter);
+        mAdapter = new ExerciseAdapter(getContext(), getDummyExercises(), false);
+        rvExercises.setAdapter(mAdapter);
 
         return view;
     }
@@ -65,6 +75,29 @@ public class WorkoutDetailFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu_detail, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.miEdit:
+                llTimer.setVisibility(View.GONE);
+                mAdapter.setEditMode(true);
+                rvExercises.setAdapter(mAdapter);
+                mFab.setVisibility(View.VISIBLE);
+                return true;
+            case R.id.miShare:
+                // TODO: Share workout
+                return true;
+            case R.id.miDelete:
+                // TODO: Delete workout
+                return true;
+            case R.id.miRename:
+                // TODO: Rename workout
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateToolbar() {

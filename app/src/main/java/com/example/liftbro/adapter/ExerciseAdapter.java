@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.liftbro.Exercise;
@@ -21,10 +22,12 @@ public class ExerciseAdapter extends
 
     private List<Exercise> mExercises;
     private Context mContext;
+    private boolean mIsEditing;
 
-    public ExerciseAdapter(Context context, List<Exercise> exercises) {
+    public ExerciseAdapter(Context context, List<Exercise> exercises, boolean isEditing) {
         mContext = context;
         mExercises = exercises;
+        mIsEditing = isEditing;
     }
 
     @Override
@@ -34,6 +37,12 @@ public class ExerciseAdapter extends
 
         // Inflate the custom layout
         View exerciseView = inflater.inflate(R.layout.item_exercise, parent, false);
+
+        // Show reorder icon if editing
+        if (mIsEditing) {
+            ImageView ivReorder = (ImageView)exerciseView.findViewById(R.id.iv_reorder);
+            ivReorder.setVisibility(View.VISIBLE);
+        }
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(exerciseView);
@@ -68,6 +77,10 @@ public class ExerciseAdapter extends
     @Override
     public int getItemCount() {
         return mExercises.size();
+    }
+
+    public void setEditMode(boolean isEditing) {
+        mIsEditing = isEditing;
     }
 
     private String formatTime(int timeInSeconds) {
