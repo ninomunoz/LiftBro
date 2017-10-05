@@ -2,7 +2,9 @@ package com.example.liftbro.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.liftbro.Exercise;
 import com.example.liftbro.R;
@@ -60,6 +63,19 @@ public class EditWorkoutFragment extends Fragment {
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
         EditExerciseAdapter adapter = new EditExerciseAdapter(getContext(), getDummyExercises());
         rvExercises.setAdapter(adapter);
+
+        // Hook up FAB
+        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab_add_exercise);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddExerciseFragment frag = AddExerciseFragment.newInstance();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, frag);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         return view;
     }
