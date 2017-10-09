@@ -22,4 +22,10 @@ public class DummyExercise {
         mName = name;
         mTime = time;
     }
+
+    public String getName() { return mName; }
+    public int getSets() { return mSets; }
+    public int getReps() { return mReps; }
+    public double getWeight() { return mWeight; }
+    public int getTime() { return mTime; }
 }
