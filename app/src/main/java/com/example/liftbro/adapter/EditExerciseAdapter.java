@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.liftbro.Exercise;
+import com.example.liftbro.model.DummyExercise;
 import com.example.liftbro.R;
 
 import java.util.List;
@@ -18,12 +18,12 @@ import java.util.List;
 
 public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapter.ViewHolder> {
 
-    private List<Exercise> mExercises;
+    private List<DummyExercise> mDummyExercises;
     private Context mContext;
 
-    public EditExerciseAdapter(Context context, List<Exercise> exercises) {
+    public EditExerciseAdapter(Context context, List<DummyExercise> dummyExercises) {
         mContext = context;
-        mExercises = exercises;
+        mDummyExercises = dummyExercises;
     }
 
     @Override
@@ -42,18 +42,18 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
     @Override
     public void onBindViewHolder(EditExerciseAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
-        Exercise exercise = mExercises.get(position);
-        int sets = exercise.getSets();
-        int reps = exercise.getReps();
-        double weight = exercise.getWeight();
-        int time = exercise.getTime();
+        DummyExercise dummyExercise = mDummyExercises.get(position);
+        int sets = dummyExercise.getSets();
+        int reps = dummyExercise.getReps();
+        double weight = dummyExercise.getWeight();
+        int time = dummyExercise.getTime();
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
         TextView tvExerciseSet = holder.tvExerciseSet;
         TextView tvExerciseWeight = holder.tvExerciseWeight;
 
-        tvExerciseName.setText(exercise.getName());
+        tvExerciseName.setText(dummyExercise.getName());
         tvExerciseSet.setText(formatSetsReps(sets, reps));
 
         if (time > 0) {
@@ -66,7 +66,7 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
 
     @Override
     public int getItemCount() {
-        return mExercises.size();
+        return mDummyExercises.size();
     }
 
     private String formatTime(int timeInSeconds) {

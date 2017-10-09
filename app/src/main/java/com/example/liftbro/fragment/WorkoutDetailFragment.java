@@ -14,8 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.liftbro.Exercise;
-import com.example.liftbro.MainActivity;
+import com.example.liftbro.model.DummyExercise;
 import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
 
@@ -103,12 +102,12 @@ public class WorkoutDetailFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTitle);
     }
 
-    private List<Exercise> getDummyExercises() {
+    private List<DummyExercise> getDummyExercises() {
         return Arrays.asList(
-                new Exercise("Bench Press", 3, 10, 150.0),
-                new Exercise("Incline DB Flies", 4, 10, 50.0),
-                new Exercise("Pushups", 3, 15, 0.0),
-                new Exercise("Jog", 1800)
+                new DummyExercise("Bench Press", 3, 10, 150.0),
+                new DummyExercise("Incline DB Flies", 4, 10, 50.0),
+                new DummyExercise("Pushups", 3, 15, 0.0),
+                new DummyExercise("Jog", 1800)
         );
     }
 }
