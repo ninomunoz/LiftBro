@@ -69,5 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DROP_TABLE_WORKOUT);
         db.execSQL(SQL_DROP_TABLE_EXERCISE);
         db.execSQL(SQL_DROP_TABLE_WORKOUT_EXERCISE);
+
+        onCreate(db);
     }
 }
