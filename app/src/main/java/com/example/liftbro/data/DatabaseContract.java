@@ -30,25 +30,6 @@ public class DatabaseContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MuscleGroupEntry.TABLE_NAME;
     }
 
-    /* DummyExercise table */
-    public static final class ExerciseEntry implements BaseColumns {
-
-        public static final String TABLE_NAME = "exercise";
-        public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_MUSCLEGROUP_ID = "musclegroupid";
-
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(ExerciseEntry.TABLE_NAME).build();
-
-        public static final String CONTENT_TYPE =
-                // vnd.android.cursor.dir/vnd.com.example.liftbro.provider.exercise
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + ExerciseEntry.TABLE_NAME;
-
-        public static final String CONTENT_ITEM_TYPE =
-                // vnd.android.cursor.item/vnd.com.example.liftbro.provider.exercise
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + ExerciseEntry.TABLE_NAME;
-    }
-
     /* Workout table */
     public static final class WorkoutEntry implements BaseColumns {
 
@@ -65,6 +46,25 @@ public class DatabaseContract {
         public static final String CONTENT_ITEM_TYPE =
                 // vnd.android.cursor.item/vnd.com.example.liftbro.provider.workout
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + WorkoutEntry.TABLE_NAME;
+    }
+
+    /* Exercise table */
+    public static final class ExerciseEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "exercise";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_MUSCLEGROUP_ID = "musclegroupid";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(ExerciseEntry.TABLE_NAME).build();
+
+        public static final String CONTENT_TYPE =
+                // vnd.android.cursor.dir/vnd.com.example.liftbro.provider.exercise
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + ExerciseEntry.TABLE_NAME;
+
+        public static final String CONTENT_ITEM_TYPE =
+                // vnd.android.cursor.item/vnd.com.example.liftbro.provider.exercise
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + ExerciseEntry.TABLE_NAME;
     }
 
     /* WorkoutExercise table */
