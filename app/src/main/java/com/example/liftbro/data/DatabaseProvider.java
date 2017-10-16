@@ -210,7 +210,7 @@ public class DatabaseProvider extends ContentProvider {
                 id = uri.getPathSegments().get(1);
                 updatedCount = mDatabase.updateWorkout(id, contentValues);
                 break;
-            case EXERCISES
+            case EXERCISES:
                 updatedCount = mDatabase.updateExercise(id, contentValues);
                 break;
             case EXERCISE_ID:
