@@ -83,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /* MuscleGroup table */
-    public Cursor getMuscleGroup(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor getMuscleGroups(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
         sqLiteQueryBuilder.setTables(MuscleGroupEntry.TABLE_NAME);
 
@@ -131,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /* Workout table */
-    public Cursor getWorkout(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor getWorkouts(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
         sqLiteQueryBuilder.setTables(WorkoutEntry.TABLE_NAME);
 
@@ -179,7 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /* Exercise table */
-    public Cursor getExercise(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor getExercises(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
         sqLiteQueryBuilder.setTables(ExerciseEntry.TABLE_NAME);
 
@@ -227,7 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /* WorkoutExercise table */
-    public Cursor getWorkoutExercise(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor getWorkoutExercises(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
         sqLiteQueryBuilder.setTables(WorkoutEntry.TABLE_NAME);
 
