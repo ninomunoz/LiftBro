@@ -50,7 +50,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
         long id = getWritableDatabase().insert(MuscleGroupEntry.TABLE_NAME, "", values);
 
         if (id <= 0) {
-            throw new SQLException("Failed to add movie");
+            throw new SQLException("Failed to add muscle group");
         }
 
         return id;
@@ -98,7 +98,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
         long id = getWritableDatabase().insert(MuscleGroupEntry.TABLE_NAME, "", values);
 
         if (id <= 0) {
-            throw new SQLException("Failed to add movie");
+            throw new SQLException("Failed to add workout");
         }
 
         return id;
@@ -146,7 +146,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
         long id = getWritableDatabase().insert(ExerciseEntry.TABLE_NAME, "", values);
 
         if (id <= 0) {
-            throw new SQLException("Failed to add movie");
+            throw new SQLException("Failed to add exercise");
         }
 
         return id;
@@ -194,7 +194,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
         long id = getWritableDatabase().insert(WorkoutExerciseEntry.TABLE_NAME, "", values);
 
         if (id <= 0) {
-            throw new SQLException("Failed to add movie");
+            throw new SQLException("Failed to add workoutExercise");
         }
 
         return id;
