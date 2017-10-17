@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <provider android:name="com.example.liftbro.data.DatabaseProvider"
+        <provider android:name="com.example.liftbro.data.LiftProvider"
             android:authorities="com.example.liftbro">
         </provider>
 
