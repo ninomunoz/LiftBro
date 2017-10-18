@@ -1,9 +1,13 @@
 package com.example.liftbro.fragment;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +19,12 @@ import android.widget.Toast;
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
 
-import java.util.Arrays;
-import java.util.List;
+import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
-public class WorkoutFragment extends Fragment {
+public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private List<String> dummyWorkouts = Arrays.asList(
-            "Chest", "Tuesday", "Abs", "Legs", "Full Body");
+    RecyclerView mRecyclerView;
+    WorkoutAdapter mAdapter;
 
     public WorkoutFragment() {
         // Required empty public constructor
@@ -44,14 +47,16 @@ public class WorkoutFragment extends Fragment {
 
         // Set up recycler view
         View view = inflater.inflate(R.layout.fragment_workout, container, false);
-        RecyclerView rvWorkouts = (RecyclerView)view.findViewById(R.id.rv_workouts);
+        mRecyclerView = view.findViewById(R.id.rv_workouts);
         GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
-        rvWorkouts.setLayoutManager(glm);
-        WorkoutAdapter adapter = new WorkoutAdapter(getActivity(), dummyWorkouts);
-        rvWorkouts.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(glm);
+        mAdapter = new WorkoutAdapter(getActivity());
+        mAdapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(0, null, this);
 
         // Hook up FAB
-        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab_add_workout);
+        FloatingActionButton fab = view.findViewById(R.id.fab_add_workout);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,5 +80,23 @@ public class WorkoutFragment extends Fragment {
     private void updateToolbar() {
         ((AppCompatActivity)getActivity()).getSupportActionBar()
                 .setTitle(getString(R.string.app_name));
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(),
+                WorkoutEntry.CONTENT_URI,
+                null, null, null,
+                WorkoutEntry.COLUMN_NAME);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.setCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.setCursor(null);
     }
 }

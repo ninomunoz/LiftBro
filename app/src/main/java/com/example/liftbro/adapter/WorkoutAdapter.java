@@ -1,6 +1,7 @@
 package com.example.liftbro.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,7 @@ import com.example.liftbro.MainActivity;
 import com.example.liftbro.R;
 import com.example.liftbro.fragment.WorkoutDetailFragment;
 
-import java.util.List;
+import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
 /**
  * Created by i57198 on 9/16/17.
@@ -21,17 +22,12 @@ import java.util.List;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder> {
 
-    List<String> mWorkouts;
     Context mContext;
+    Cursor mCursor;
 
-    public WorkoutAdapter(Context context, List<String> workouts) {
+
+    public WorkoutAdapter(Context context) {
         mContext = context;
-        mWorkouts = workouts;
-    }
-
-    @Override
-    public int getItemCount() {
-        return mWorkouts.size();
     }
 
     @Override
@@ -42,7 +38,9 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     @Override
     public void onBindViewHolder(WorkoutViewHolder holder, int position) {
-        final String workoutName = mWorkouts.get(position);
+        mCursor.moveToPosition(position);
+        final String workoutName = mCursor.getString(mCursor.getColumnIndex(WorkoutEntry.COLUMN_NAME));
+
         holder.workoutName.setText(workoutName);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +55,28 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
+    public int getItemCount() {
+        return mCursor != null ? mCursor.getCount() : 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (mCursor != null) {
+            if (mCursor.moveToPosition(position)) {
+                return mCursor.getLong(mCursor.getColumnIndex(WorkoutEntry._ID));
+            }
+            return 0;
+        }
+        return 0;
+    }
+
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
+    public void setCursor(Cursor cursor) {
+        mCursor = cursor;
+        notifyDataSetChanged();
     }
 
     public static class WorkoutViewHolder extends RecyclerView.ViewHolder {
@@ -67,8 +85,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
         WorkoutViewHolder(View itemView) {
             super(itemView);
-            cardView = (CardView)itemView.findViewById(R.id.cv_workout);
-            workoutName = (TextView)itemView.findViewById(R.id.tv_workout_name);
+            cardView = itemView.findViewById(R.id.cv_workout);
+            workoutName = itemView.findViewById(R.id.tv_workout_name);
         }
     }
 }
