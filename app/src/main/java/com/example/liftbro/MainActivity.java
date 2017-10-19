@@ -8,11 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.liftbro.fragment.AboutDialogFragment;
+import com.example.liftbro.fragment.AddWorkoutDialogFragment;
 import com.example.liftbro.fragment.WorkoutFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddWorkoutDialogFragment.AddWorkoutListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -90,5 +92,11 @@ public class MainActivity extends AppCompatActivity {
         } catch(Exception e) {
             Log.e(LOG_TAG, e.toString());
         }
+    }
+
+    // AddWorkoutDialogFragment.AddWorkoutListener implementation
+    @Override
+    public void onAdd(String workoutName) {
+        Toast.makeText(this, "TODO: Add " + workoutName + " to db", Toast.LENGTH_LONG).show();
     }
 }

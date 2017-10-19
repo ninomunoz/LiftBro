@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
@@ -60,8 +59,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Launch Add Workout dialog
-                Toast.makeText(getContext(), "Clicked Add Workout FAB", Toast.LENGTH_SHORT).show();
+                new AddWorkoutDialogFragment().show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
             }
         });
         return view;
@@ -82,6 +80,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 .setTitle(getString(R.string.app_name));
     }
 
+    // LoaderManager.LoaderCallbacks<Cursor> implementation
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
