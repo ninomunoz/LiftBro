@@ -22,7 +22,7 @@ public class AboutDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.about, null, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_about, null, false);
         TextView tvAbout = view.findViewById(R.id.tvAbout);
         tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
 
