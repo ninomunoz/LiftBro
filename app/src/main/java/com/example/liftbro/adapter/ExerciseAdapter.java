@@ -1,60 +1,77 @@
 package com.example.liftbro.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.liftbro.model.DummyExercise;
+import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.R;
 
-import java.util.List;
+import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
+import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 
 /**
  * Created by i57198 on 9/17/17.
  */
 
 public class ExerciseAdapter extends
-        RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
+        RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
 
-    private List<DummyExercise> mDummyExercises;
-    private Context mContext;
+    Context mContext;
+    Cursor mCursor;
 
-    public ExerciseAdapter(Context context, List<DummyExercise> dummyExercises) {
+    public ExerciseAdapter(Context context) {
         mContext = context;
-        mDummyExercises = dummyExercises;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        // Inflate the custom layout
-        View exerciseView = inflater.inflate(R.layout.item_exercise, parent, false);
-
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(exerciseView);
-        return viewHolder;
+    public ExerciseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_exercise, parent, false);
+        return new ExerciseViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ExerciseViewHolder holder, int position) {
         // Get the data model based on position
-        DummyExercise dummyExercise = mDummyExercises.get(position);
-        int sets = dummyExercise.getSets();
-        int reps = dummyExercise.getReps();
-        double weight = dummyExercise.getWeight();
-        int time = dummyExercise.getTime();
+        mCursor.moveToPosition(position);
+
+        final int exerciseId = mCursor.getInt(
+                mCursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
+
+        String[] projection = { ExerciseEntry.COLUMN_NAME };
+        String selection = ExerciseEntry._ID + " = ?";
+        String[] selectionArgs = { Integer.toString(exerciseId) };
+
+        Cursor exerciseCursor = mContext.getContentResolver().query(
+                LiftContract.ExerciseEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+        exerciseCursor.moveToFirst();
+
+        final String name = exerciseCursor.getString(
+                exerciseCursor.getColumnIndex(ExerciseEntry.COLUMN_NAME));
+        final int sets = mCursor.getInt(
+                mCursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_SETS));
+        final int reps = mCursor.getInt(
+                mCursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_REPS));
+        final double weight = mCursor.getDouble(
+                mCursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_WEIGHT));
+        final int time = mCursor.getInt(
+                mCursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_TIME));
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
         TextView tvExerciseSet = holder.tvExerciseSet;
         TextView tvExerciseWeight = holder.tvExerciseWeight;
 
-        tvExerciseName.setText(dummyExercise.getName());
+        tvExerciseName.setText(name);
         tvExerciseSet.setText(formatSetsReps(sets, reps));
 
         if (time > 0) {
@@ -67,7 +84,27 @@ public class ExerciseAdapter extends
 
     @Override
     public int getItemCount() {
-        return mDummyExercises.size();
+        return mCursor != null ? mCursor.getCount() : 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (mCursor != null) {
+            if (mCursor.moveToPosition(position)) {
+                return mCursor.getLong(mCursor.getColumnIndex(WorkoutExerciseEntry._ID));
+            }
+            return 0;
+        }
+        return 0;
+    }
+
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
+    public void setCursor(Cursor cursor) {
+        mCursor = cursor;
+        notifyDataSetChanged();
     }
 
     private String formatTime(int timeInSeconds) {
@@ -106,17 +143,17 @@ public class ExerciseAdapter extends
         return formattedSetsReps;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ExerciseViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvExerciseName;
         public TextView tvExerciseSet;
         public TextView tvExerciseWeight;
 
-        public ViewHolder(View itemView) {
+        public ExerciseViewHolder(View itemView) {
             super(itemView);
-            tvExerciseName = (TextView) itemView.findViewById(R.id.tv_exercise_name);
-            tvExerciseSet = (TextView) itemView.findViewById(R.id.tv_exercise_set);
-            tvExerciseWeight = (TextView) itemView.findViewById(R.id.tv_exercise_weight);
+            tvExerciseName = itemView.findViewById(R.id.tv_exercise_name);
+            tvExerciseSet = itemView.findViewById(R.id.tv_exercise_set);
+            tvExerciseWeight = itemView.findViewById(R.id.tv_exercise_weight);
         }
     }
 }

@@ -1,8 +1,12 @@
 package com.example.liftbro.fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.model.DummyExercise;
 import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
@@ -21,11 +26,13 @@ import com.example.liftbro.R;
 import java.util.Arrays;
 import java.util.List;
 
-public class WorkoutDetailFragment extends Fragment {
+public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_TITLE_KEY = "title";
+    private static final String ARG_WORKOUT_ID_KEY = "workoutId";
 
     private String mTitle;
+    private int mWorkoutId;
     private RecyclerView rvExercises;
     private ExerciseAdapter mAdapter;
 
@@ -33,10 +40,11 @@ public class WorkoutDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static WorkoutDetailFragment newInstance(String title) {
+    public static WorkoutDetailFragment newInstance(int workoutId, String title) {
         WorkoutDetailFragment frag = new WorkoutDetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE_KEY, title);
+        args.putInt(ARG_WORKOUT_ID_KEY, workoutId);
         frag.setArguments(args);
         return frag;
     }
@@ -44,6 +52,7 @@ public class WorkoutDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mTitle = getArguments().getString(ARG_TITLE_KEY);
+        mWorkoutId = getArguments().getInt(ARG_WORKOUT_ID_KEY);
         super.onCreate(savedInstanceState);
     }
 
@@ -55,12 +64,14 @@ public class WorkoutDetailFragment extends Fragment {
         updateToolbar();
 
         // Set up recycler view
-        rvExercises = (RecyclerView)view.findViewById(R.id.rv_exercises);
+        rvExercises = view.findViewById(R.id.rv_exercises);
         LinearLayoutManager glm = new LinearLayoutManager(getActivity());
         rvExercises.setLayoutManager(glm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
-        mAdapter = new ExerciseAdapter(getContext(), getDummyExercises());
+        mAdapter = new ExerciseAdapter(getContext());
+        mAdapter.setHasStableIds(true);
         rvExercises.setAdapter(mAdapter);
+        getLoaderManager().initLoader(1, null, this);
 
         return view;
     }
@@ -102,12 +113,22 @@ public class WorkoutDetailFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTitle);
     }
 
-    private List<DummyExercise> getDummyExercises() {
-        return Arrays.asList(
-                new DummyExercise("Bench Press", 3, 10, 150.0),
-                new DummyExercise("Incline DB Flies", 4, 10, 50.0),
-                new DummyExercise("Pushups", 3, 15, 0.0),
-                new DummyExercise("Jog", 1800)
-        );
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        String selection = LiftContract.WorkoutExerciseEntry.COLUMN_WORKOUT_ID + " = ?";
+        String[] selectionArgs = { Integer.toString(mWorkoutId) };
+        return new CursorLoader(getActivity(),
+                LiftContract.WorkoutExerciseEntry.CONTENT_URI,
+                null, selection, selectionArgs, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.setCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        mAdapter.setCursor(null);
     }
 }

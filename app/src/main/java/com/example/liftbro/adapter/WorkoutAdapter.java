@@ -25,7 +25,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     Context mContext;
     Cursor mCursor;
 
-
     public WorkoutAdapter(Context context) {
         mContext = context;
     }
@@ -39,13 +38,15 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     @Override
     public void onBindViewHolder(WorkoutViewHolder holder, int position) {
         mCursor.moveToPosition(position);
+
+        final int workoutId = mCursor.getInt(mCursor.getColumnIndex((WorkoutEntry._ID)));
         final String workoutName = mCursor.getString(mCursor.getColumnIndex(WorkoutEntry.COLUMN_NAME));
 
         holder.workoutName.setText(workoutName);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutName);
+                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutId, workoutName);
                 FragmentTransaction transaction = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
