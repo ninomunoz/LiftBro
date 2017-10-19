@@ -1,11 +1,13 @@
 package com.example.liftbro;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import com.example.liftbro.fragment.WorkoutFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.miInvite:
-                // TODO: Share app intent
+                invite();
                 return true;
             case R.id.miAbout:
                 showAbout();
-                // TODO: Show about dialog
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -90,5 +93,17 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(view);
         builder.create();
         builder.show();
+    }
+
+    private void invite() {
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
+            i.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_msg));
+            startActivity(Intent.createChooser(i, getString(R.string.chooser_msg)));
+        } catch(Exception e) {
+            Log.e(LOG_TAG, e.toString());
+        }
     }
 }

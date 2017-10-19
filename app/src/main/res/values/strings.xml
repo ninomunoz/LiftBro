@@ -5,6 +5,10 @@
     <string name="about_msg">Capstone Project for Udacity Android Developer Nanodegree</string>
     <string name="about_me">Nino Munoz\n<a href="https://github.com/ninomunoz">Github</a>" | "<a href="https://www.linkedin.com/in/ninomunoz">LinkedIn</a></string>
 
+    <!-- Invite -->
+    <string name="invite_msg">"Check out LiftBro on GitHub!\n\nhttps://github.com/ninomunoz/LiftBro"</string>
+    <string name="chooser_msg">Share this app using:</string>
+
     <!-- AddExerciseFragment -->
     <string name="muscle_group">Muscle Group</string>
     <string name="exercise">Exercise</string>
