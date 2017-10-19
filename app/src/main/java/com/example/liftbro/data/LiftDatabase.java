@@ -173,7 +173,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
     /* WorkoutExercise table */
     public Cursor getWorkoutExercises(String id, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
-        sqLiteQueryBuilder.setTables(WorkoutEntry.TABLE_NAME);
+        sqLiteQueryBuilder.setTables(WorkoutExerciseEntry.TABLE_NAME);
 
         if (id != null) {
             sqLiteQueryBuilder.appendWhere("_id = " + id);
