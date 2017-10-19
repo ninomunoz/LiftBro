@@ -2,17 +2,14 @@ package com.example.liftbro;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
+import com.example.liftbro.fragment.AboutDialogFragment;
 import com.example.liftbro.fragment.WorkoutFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,23 +73,11 @@ public class MainActivity extends AppCompatActivity {
                 invite();
                 return true;
             case R.id.miAbout:
-                showAbout();
+                new AboutDialogFragment().show(getSupportFragmentManager(), AboutDialogFragment.ABOUT_DIALOG_TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showAbout() {
-        View view = getLayoutInflater().inflate(R.layout.about, null, false);
-        TextView tvAbout = view.findViewById(R.id.tvAbout);
-        tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setView(view);
-        builder.create();
-        builder.show();
     }
 
     private void invite() {
