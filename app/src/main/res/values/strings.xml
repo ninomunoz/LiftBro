@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">LiftBro</string>
 
+    <!-- About -->
+    <string name="about_msg">Capstone Project for Udacity Android Developer Nanodegree</string>
+    <string name="about_me">Nino Munoz\n<a href="https://github.com/ninomunoz">Github</a>" | "<a href="https://www.linkedin.com/in/ninomunoz">LinkedIn</a></string>
+
     <!-- AddExerciseFragment -->
     <string name="muscle_group">Muscle Group</string>
     <string name="exercise">Exercise</string>

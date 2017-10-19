@@ -1,11 +1,15 @@
 package com.example.liftbro;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.liftbro.fragment.WorkoutFragment;
 
@@ -64,8 +68,27 @@ public class MainActivity extends AppCompatActivity {
                     fm.popBackStack();
                 }
                 return true;
+            case R.id.miInvite:
+                // TODO: Share app intent
+                return true;
+            case R.id.miAbout:
+                showAbout();
+                // TODO: Show about dialog
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showAbout() {
+        View view = getLayoutInflater().inflate(R.layout.about, null, false);
+        TextView tvAbout = view.findViewById(R.id.tvAbout);
+        tvAbout.setMovementMethod(LinkMovementMethod.getInstance());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setView(view);
+        builder.create();
+        builder.show();
     }
 }
