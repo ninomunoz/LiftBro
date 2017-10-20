@@ -1,7 +1,9 @@
 package com.example.liftbro.fragment;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -17,10 +19,11 @@ import android.view.ViewGroup;
 
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
+import com.example.liftbro.data.LiftContract;
 
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
-public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AddWorkoutDialogFragment.AddWorkoutListener {
 
     RecyclerView mRecyclerView;
     WorkoutAdapter mAdapter;
@@ -59,20 +62,12 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AddWorkoutDialogFragment().show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
+                AddWorkoutDialogFragment dlg = new AddWorkoutDialogFragment();
+                dlg.setTargetFragment(WorkoutFragment.this, 0);
+                dlg.show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
             }
         });
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     private void updateToolbar() {
@@ -97,5 +92,14 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.setCursor(null);
+    }
+
+    // AddWorkoutDialogFragment.AddWorkoutListener implementation
+    @Override
+    public void onAdd(String workoutName) {
+        ContentValues values = new ContentValues();
+        values.put(LiftContract.WorkoutEntry.COLUMN_NAME, workoutName);
+        Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
+        getLoaderManager().restartLoader(0, null, this);
     }
 }
