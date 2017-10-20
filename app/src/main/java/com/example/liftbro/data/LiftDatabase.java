@@ -95,7 +95,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
     }
 
     public long addWorkout(ContentValues values) throws SQLException {
-        long id = getWritableDatabase().insert(MuscleGroupEntry.TABLE_NAME, "", values);
+        long id = getWritableDatabase().insert(WorkoutEntry.TABLE_NAME, "", values);
 
         if (id <= 0) {
             throw new SQLException("Failed to add workout");
@@ -106,19 +106,19 @@ public class LiftDatabase extends SQLiteAssetHelper {
 
     public int deleteWorkout(String id) {
         if (id == null) {
-            return getWritableDatabase().delete(MuscleGroupEntry.TABLE_NAME, null, null);
+            return getWritableDatabase().delete(WorkoutEntry.TABLE_NAME, null, null);
         }
         else {
-            return getWritableDatabase().delete(MuscleGroupEntry.TABLE_NAME, "_id=?", new String[]{id});
+            return getWritableDatabase().delete(WorkoutEntry.TABLE_NAME, "_id=?", new String[]{id});
         }
     }
 
     public int updateWorkout(String id, ContentValues values) {
         if (id == null) {
-            return getWritableDatabase().update(MuscleGroupEntry.TABLE_NAME, values, null, null);
+            return getWritableDatabase().update(WorkoutEntry.TABLE_NAME, values, null, null);
         }
         else {
-            return getWritableDatabase().update(MuscleGroupEntry.TABLE_NAME, values, "_id=?", new String[]{id});
+            return getWritableDatabase().update(WorkoutEntry.TABLE_NAME, values, "_id=?", new String[]{id});
         }
     }
 
@@ -163,10 +163,10 @@ public class LiftDatabase extends SQLiteAssetHelper {
 
     public int updateExercise(String id, ContentValues values) {
         if (id == null) {
-            return getWritableDatabase().update(MuscleGroupEntry.TABLE_NAME, values, null, null);
+            return getWritableDatabase().update(ExerciseEntry.TABLE_NAME, values, null, null);
         }
         else {
-            return getWritableDatabase().update(MuscleGroupEntry.TABLE_NAME, values, "_id=?", new String[]{id});
+            return getWritableDatabase().update(ExerciseEntry.TABLE_NAME, values, "_id=?", new String[]{id});
         }
     }
 
