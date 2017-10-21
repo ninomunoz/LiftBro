@@ -1,6 +1,9 @@
 package com.example.liftbro.fragment;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,7 +29,7 @@ import com.example.liftbro.R;
 import java.util.Arrays;
 import java.util.List;
 
-public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, RenameWorkoutDialogFragment.RenameWorkoutListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -101,7 +104,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 // TODO: Delete workout
                 return true;
             case R.id.miRename:
-                // TODO: Rename workout
+                renameWorkout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -113,6 +116,13 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTitle);
     }
 
+    private void renameWorkout() {
+        RenameWorkoutDialogFragment dlg = RenameWorkoutDialogFragment.newInstance(mTitle);
+        dlg.setTargetFragment(WorkoutDetailFragment.this, 0);
+        dlg.show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
+    }
+
+    // LoaderManager.LoaderCallbacks<Cursor> implementation
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         String selection = LiftContract.WorkoutExerciseEntry.COLUMN_WORKOUT_ID + " = ?";
@@ -130,5 +140,17 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader loader) {
         mAdapter.setCursor(null);
+    }
+
+    // RenameWorkoutDialogFragment.RenameWorkoutListener implementation
+    @Override
+    public void onRename(String newWorkoutName) {
+        mTitle = newWorkoutName;
+        updateToolbar();
+        ContentValues values = new ContentValues();
+        values.put(LiftContract.WorkoutEntry.COLUMN_NAME, newWorkoutName);
+        getActivity().getContentResolver().update(
+                ContentUris.withAppendedId(LiftContract.WorkoutEntry.CONTENT_URI, mWorkoutId),
+                values, null, null);
     }
 }

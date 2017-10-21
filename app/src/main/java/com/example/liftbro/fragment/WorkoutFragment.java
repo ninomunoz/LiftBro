@@ -99,7 +99,6 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     public void onAdd(String workoutName) {
         ContentValues values = new ContentValues();
         values.put(LiftContract.WorkoutEntry.COLUMN_NAME, workoutName);
-        Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
-        getLoaderManager().restartLoader(0, null, this);
+        getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
     }
 }
