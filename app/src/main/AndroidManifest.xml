@@ -14,7 +14,7 @@
             android:authorities="com.example.liftbro">
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

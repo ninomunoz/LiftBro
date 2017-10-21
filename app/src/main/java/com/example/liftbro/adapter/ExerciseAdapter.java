@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.R;
+import com.example.liftbro.util.FormatUtil;
 
 import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
@@ -72,13 +73,13 @@ public class ExerciseAdapter extends
         TextView tvExerciseWeight = holder.tvExerciseWeight;
 
         tvExerciseName.setText(name);
-        tvExerciseSet.setText(formatSetsReps(sets, reps));
+        tvExerciseSet.setText(FormatUtil.formatSetsReps(sets, reps));
 
         if (time > 0) {
-            tvExerciseWeight.setText(formatTime(time));
+            tvExerciseWeight.setText(FormatUtil.formatTime(time));
         }
         else {
-            tvExerciseWeight.setText(formatWeight(weight));
+            tvExerciseWeight.setText(FormatUtil.formatWeight(weight));
         }
     }
 
@@ -105,42 +106,6 @@ public class ExerciseAdapter extends
     public void setCursor(Cursor cursor) {
         mCursor = cursor;
         notifyDataSetChanged();
-    }
-
-    private String formatTime(int timeInSeconds) {
-        if (timeInSeconds >= 0 && timeInSeconds < 60) {
-            return timeInSeconds + " sec";
-        }
-        else {
-            int minutes = timeInSeconds / 60;
-            int seconds = timeInSeconds % 60;
-
-            if (seconds == 0) {
-                return Integer.toString(minutes) + " min";
-            }
-            else {
-                return Integer.toString(minutes) + " min " + seconds + " sec";
-            }
-        }
-    }
-
-    private String formatWeight(double weight) {
-        return weight == 0.0 ? "BW" : weight + " lb";
-    }
-
-    private String formatSetsReps(int sets, int reps) {
-        String formattedSetsReps;
-        if (sets > 0) {
-            formattedSetsReps = sets + " sets";
-            if (reps > 0) {
-                formattedSetsReps = sets + " x " + reps;
-            }
-        }
-        else {
-            formattedSetsReps = "---";
-        }
-
-        return formattedSetsReps;
     }
 
     public class ExerciseViewHolder extends RecyclerView.ViewHolder {

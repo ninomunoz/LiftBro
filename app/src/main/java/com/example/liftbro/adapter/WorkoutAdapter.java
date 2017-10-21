@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.liftbro.MainActivity;
+import com.example.liftbro.activity.MainActivity;
 import com.example.liftbro.R;
 import com.example.liftbro.fragment.WorkoutDetailFragment;
 

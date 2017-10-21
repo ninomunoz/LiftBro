@@ -2,6 +2,7 @@ package com.example.liftbro.fragment;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,11 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.liftbro.data.LiftContract;
-import com.example.liftbro.dialog.AddWorkoutDialogFragment;
 import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
 import com.example.liftbro.dialog.DeleteWorkoutDialogFragment;
 import com.example.liftbro.dialog.RenameWorkoutDialogFragment;
+import com.example.liftbro.util.FormatUtil;
+
+import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
+import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 
 public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener {
@@ -97,7 +101,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 transaction.commit();
                 return true;
             case R.id.miShare:
-                // TODO: Share workout
+                shareWorkout();
                 return true;
             case R.id.miDelete:
                 deleteWorkout();
@@ -125,6 +129,55 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         DeleteWorkoutDialogFragment dlg = new DeleteWorkoutDialogFragment();
         dlg.setTargetFragment(WorkoutDetailFragment.this, 0);
         dlg.show(getActivity().getSupportFragmentManager(), DeleteWorkoutDialogFragment.DELETE_WORKOUT_DIALOG_TAG);
+    }
+
+    private void shareWorkout() {
+        String shareMsg = String.format(getString(R.string.share_msg), mTitle);
+        Cursor cursor = mAdapter.getCursor();
+        cursor.moveToFirst();
+
+        do {
+            final int exerciseId = cursor.getInt(
+                cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
+
+            String[] projection = { ExerciseEntry.COLUMN_NAME };
+            String selection = ExerciseEntry._ID + " = ?";
+            String[] selectionArgs = { Integer.toString(exerciseId) };
+
+            Cursor exerciseCursor = getContext().getContentResolver().query(
+                    LiftContract.ExerciseEntry.CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+            );
+            exerciseCursor.moveToFirst();
+
+            final String name = exerciseCursor.getString(
+                    exerciseCursor.getColumnIndex(ExerciseEntry.COLUMN_NAME));
+            final int sets = cursor.getInt(
+                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_SETS));
+            final int reps = cursor.getInt(
+                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_REPS));
+            final double weight = cursor.getDouble(
+                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_WEIGHT));
+            final int time = cursor.getInt(
+                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_TIME));
+
+            String msgSetsReps = FormatUtil.formatSetsReps(sets, reps);
+            String msgWeightTime = time > 0 ?
+                    FormatUtil.formatTime(time) :
+                    FormatUtil.formatWeight(weight);
+
+            shareMsg += name + ": " + msgSetsReps + ", " + msgWeightTime + "\n";
+        }
+        while (cursor.moveToNext());
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareMsg);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
     }
 
     // LoaderManager.LoaderCallbacks<Cursor> implementation

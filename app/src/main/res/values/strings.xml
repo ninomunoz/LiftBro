@@ -13,6 +13,9 @@
     <string name="muscle_group">Muscle Group</string>
     <string name="exercise">Exercise</string>
 
+    <!-- WorkoutDetailFragment -->
+    <string name="share_msg">Check out this %1$s workout!\n\n</string>
+
     <!-- Dialogs -->
     <string name="add_workout">Add Workout</string>
     <string name="delete_workout">Delete Workout</string>

@@ -1,4 +1,4 @@
-package com.example.liftbro;
+package com.example.liftbro.activity;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.liftbro.R;
 import com.example.liftbro.dialog.AboutDialogFragment;
 import com.example.liftbro.fragment.WorkoutFragment;
 
