@@ -56,6 +56,7 @@ public class RenameWorkoutDialogFragment extends DialogFragment {
         final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_rename_workout, null, false);
         final EditText etWorkoutName = view.findViewById(R.id.etWorkoutName);
         etWorkoutName.setText(mWorkoutName);
+        etWorkoutName.setSelection(etWorkoutName.getText().length());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.rename_workout));
