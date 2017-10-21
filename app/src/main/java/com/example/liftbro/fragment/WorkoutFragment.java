@@ -1,9 +1,7 @@
 package com.example.liftbro.fragment;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -20,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
 import com.example.liftbro.data.LiftContract;
+import com.example.liftbro.dialog.AddWorkoutDialogFragment;
 
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 

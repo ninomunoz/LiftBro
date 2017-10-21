@@ -1,4 +1,4 @@
-package com.example.liftbro.fragment;
+package com.example.liftbro.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,57 +15,42 @@ import android.widget.EditText;
 import com.example.liftbro.R;
 
 /**
- * Created by i57198 on 10/20/17.
+ * Created by i57198 on 10/19/17.
  */
 
-public class RenameWorkoutDialogFragment extends DialogFragment {
+public class AddWorkoutDialogFragment extends DialogFragment {
 
-    public static final String RENAME_WORKOUT_DIALOG_TAG = RenameWorkoutDialogFragment.class.getSimpleName();
-    private static final String ARG_WORKOUT_NAME = "WorkoutName";
+    public static final String ADD_WORKOUT_DIALOG_TAG = AddWorkoutDialogFragment.class.getSimpleName();
 
-    private RenameWorkoutListener mListener;
-    private String mWorkoutName;
-
-    public static RenameWorkoutDialogFragment newInstance(String workoutName) {
-        RenameWorkoutDialogFragment frag = new RenameWorkoutDialogFragment();
-
-        Bundle args = new Bundle();
-        args.putString(ARG_WORKOUT_NAME, workoutName);
-        frag.setArguments(args);
-
-        return frag;
-    }
+    private AddWorkoutListener mListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mWorkoutName = getArguments().getString(ARG_WORKOUT_NAME);
-
         try {
-            mListener = (RenameWorkoutListener)getTargetFragment();
+            mListener = (AddWorkoutListener)getTargetFragment();
         }
         catch (ClassCastException e) {
-            throw new ClassCastException("Calling fragment must implement RenameWorkoutListener");
+            throw new ClassCastException("Calling fragment must implement AddWorkoutListener");
         }
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_rename_workout, null, false);
+        final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_add_workout, null, false);
         final EditText etWorkoutName = view.findViewById(R.id.etWorkoutName);
-        etWorkoutName.setText(mWorkoutName);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Rename Workout");
+        builder.setTitle("Add Workout");
         builder.setView(view);
 
-        builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String workoutName = etWorkoutName.getText().toString();
-                mListener.onRename(workoutName);
+                mListener.onAdd(workoutName);
             }
         });
 
@@ -88,7 +73,7 @@ public class RenameWorkoutDialogFragment extends DialogFragment {
         return dlg;
     }
 
-    public interface RenameWorkoutListener {
-        void onRename(String newWorkoutName);
+    public interface AddWorkoutListener {
+        void onAdd(String workoutName);
     }
 }

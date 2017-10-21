@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.liftbro.fragment.AboutDialogFragment;
+import com.example.liftbro.dialog.AboutDialogFragment;
 import com.example.liftbro.fragment.WorkoutFragment;
 
 public class MainActivity extends AppCompatActivity {

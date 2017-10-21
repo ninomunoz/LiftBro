@@ -3,7 +3,6 @@ package com.example.liftbro.fragment;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -22,12 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.liftbro.data.LiftContract;
-import com.example.liftbro.model.DummyExercise;
+import com.example.liftbro.dialog.AddWorkoutDialogFragment;
 import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
-
-import java.util.Arrays;
-import java.util.List;
+import com.example.liftbro.dialog.RenameWorkoutDialogFragment;
 
 public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, RenameWorkoutDialogFragment.RenameWorkoutListener {
 

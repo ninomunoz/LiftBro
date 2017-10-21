@@ -1,4 +1,4 @@
-package com.example.liftbro.fragment;
+package com.example.liftbro.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
