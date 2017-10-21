@@ -24,9 +24,11 @@ import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.AddWorkoutDialogFragment;
 import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
+import com.example.liftbro.dialog.DeleteWorkoutDialogFragment;
 import com.example.liftbro.dialog.RenameWorkoutDialogFragment;
 
-public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, RenameWorkoutDialogFragment.RenameWorkoutListener {
+public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -98,7 +100,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 // TODO: Share workout
                 return true;
             case R.id.miDelete:
-                // TODO: Delete workout
+                deleteWorkout();
                 return true;
             case R.id.miRename:
                 renameWorkout();
@@ -117,6 +119,12 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         RenameWorkoutDialogFragment dlg = RenameWorkoutDialogFragment.newInstance(mTitle);
         dlg.setTargetFragment(WorkoutDetailFragment.this, 0);
         dlg.show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
+    }
+
+    private void deleteWorkout() {
+        DeleteWorkoutDialogFragment dlg = new DeleteWorkoutDialogFragment();
+        dlg.setTargetFragment(WorkoutDetailFragment.this, 0);
+        dlg.show(getActivity().getSupportFragmentManager(), DeleteWorkoutDialogFragment.DELETE_WORKOUT_DIALOG_TAG);
     }
 
     // LoaderManager.LoaderCallbacks<Cursor> implementation
@@ -149,5 +157,13 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         getActivity().getContentResolver().update(
                 ContentUris.withAppendedId(LiftContract.WorkoutEntry.CONTENT_URI, mWorkoutId),
                 values, null, null);
+    }
+
+    @Override
+    public void onDelete() {
+        getActivity().getContentResolver().delete(
+                ContentUris.withAppendedId(LiftContract.WorkoutEntry.CONTENT_URI, mWorkoutId),
+                null, null);
+        getActivity().onBackPressed();
     }
 }
