@@ -159,6 +159,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 values, null, null);
     }
 
+    // DeleteWorkoutDialogFragment.DeleteWorkoutListener implementation
     @Override
     public void onDelete() {
         getActivity().getContentResolver().delete(
