@@ -118,7 +118,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private void renameWorkout() {
         RenameWorkoutDialogFragment dlg = RenameWorkoutDialogFragment.newInstance(mTitle);
         dlg.setTargetFragment(WorkoutDetailFragment.this, 0);
-        dlg.show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
+        dlg.show(getActivity().getSupportFragmentManager(), RenameWorkoutDialogFragment.RENAME_WORKOUT_DIALOG_TAG);
     }
 
     private void deleteWorkout() {

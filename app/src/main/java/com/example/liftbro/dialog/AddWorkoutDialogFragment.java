@@ -43,10 +43,10 @@ public class AddWorkoutDialogFragment extends DialogFragment {
         final EditText etWorkoutName = view.findViewById(R.id.etWorkoutName);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Add Workout");
+        builder.setTitle(getString(R.string.add_workout));
         builder.setView(view);
 
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String workoutName = etWorkoutName.getText().toString();
@@ -54,7 +54,7 @@ public class AddWorkoutDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dismiss();

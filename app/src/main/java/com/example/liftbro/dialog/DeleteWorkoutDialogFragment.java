@@ -1,14 +1,12 @@
 package com.example.liftbro.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.inputmethod.InputMethodManager;
 
 import com.example.liftbro.R;
 
@@ -38,17 +36,17 @@ public class DeleteWorkoutDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Delete Workout");
-        builder.setMessage("Are you sure you want to delete this workout?");
+        builder.setTitle(getString(R.string.delete_workout));
+        builder.setMessage(getString(R.string.dlg_delete_workout_msg));
 
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mListener.onDelete();
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dismiss();

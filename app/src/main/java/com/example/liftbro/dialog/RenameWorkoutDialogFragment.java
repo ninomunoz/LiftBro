@@ -58,10 +58,10 @@ public class RenameWorkoutDialogFragment extends DialogFragment {
         etWorkoutName.setText(mWorkoutName);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Rename Workout");
+        builder.setTitle(getString(R.string.rename_workout));
         builder.setView(view);
 
-        builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.rename), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String workoutName = etWorkoutName.getText().toString();
@@ -69,7 +69,7 @@ public class RenameWorkoutDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dismiss();
