@@ -4,7 +4,9 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -20,6 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
 import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.adapter.ExerciseAdapter;
@@ -32,7 +36,7 @@ import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 
 public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener {
+        RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener, View.OnClickListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -41,6 +45,10 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private int mWorkoutId;
     private RecyclerView rvExercises;
     private ExerciseAdapter mAdapter;
+    private Chronometer mChronometer;
+    private TextView tvStart;
+    private TextView tvStop;
+    private long mTimeWhenStopped = 0;
 
     public WorkoutDetailFragment() {
         // Required empty public constructor
@@ -78,6 +86,14 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         mAdapter.setHasStableIds(true);
         rvExercises.setAdapter(mAdapter);
         getLoaderManager().initLoader(1, null, this);
+
+        mChronometer = view.findViewById(R.id.chronometer);
+
+        tvStart = view.findViewById(R.id.tv_start);
+        tvStart.setOnClickListener(this);
+        tvStart.setTextColor(Color.GREEN);
+        tvStop = view.findViewById(R.id.tv_stop);
+        tvStop.setTextColor(Color.RED);
 
         return view;
     }
@@ -219,5 +235,35 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 ContentUris.withAppendedId(LiftContract.WorkoutEntry.CONTENT_URI, mWorkoutId),
                 null, null);
         getActivity().onBackPressed();
+    }
+
+    // View.OnClickListener implementation
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_start:
+                mChronometer.setBase(SystemClock.elapsedRealtime() + mTimeWhenStopped);
+                mChronometer.start();
+                tvStart.setTextColor(Color.DKGRAY);
+                tvStart.setOnClickListener(null);
+                tvStop.setText(getString(R.string.stop));
+                tvStop.setOnClickListener(this);
+                break;
+            case R.id.tv_stop:
+                if (tvStop.getText().toString().equals(getString(R.string.stop))) { // stop
+                    tvStop.setText(getString(R.string.reset));
+                    tvStart.setTextColor(Color.GREEN);
+                    mTimeWhenStopped = mChronometer.getBase() - SystemClock.elapsedRealtime();
+                    mChronometer.stop();
+                }
+                else { // reset
+                    tvStop.setText(getString(R.string.stop));
+                    mChronometer.setBase(SystemClock.elapsedRealtime());
+                    mTimeWhenStopped = 0;
+                    tvStop.setOnClickListener(null);
+                }
+                tvStart.setOnClickListener(this);
+                break;
+        }
     }
 }

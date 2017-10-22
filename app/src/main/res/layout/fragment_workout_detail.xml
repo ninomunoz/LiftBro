@@ -13,7 +13,6 @@
         android:layout_margin="4dp" />
 
     <LinearLayout
-        android:id="@+id/ll_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -21,29 +20,32 @@
         android:padding="16dp"
         android:layout_alignParentBottom="true">
         <TextView
+            android:id="@+id/tv_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="@android:color/holo_green_light"
-            android:text="START" />
-        <TextView
+            android:text="@string/start" />
+        <Chronometer
+            android:id="@+id/chronometer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:format="%s"
             android:textSize="20sp"
-            android:textColor="@android:color/white"
-            android:text="00:00" />
+            android:textColor="@android:color/white" />
         <TextView
+            android:id="@+id/tv_stop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="@android:color/holo_red_light"
-            android:text="STOP" />
+            android:text="@string/stop" />
     </LinearLayout>
 
 </RelativeLayout>
