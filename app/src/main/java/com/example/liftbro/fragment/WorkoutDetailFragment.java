@@ -110,11 +110,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miEdit:
-                EditWorkoutFragment frag = EditWorkoutFragment.newInstance(mTitle);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, frag);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                editWorkout();
                 return true;
             case R.id.miShare:
                 shareWorkout();
@@ -133,6 +129,14 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private void updateToolbar() {
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTitle);
+    }
+
+    private void editWorkout() {
+        EditWorkoutFragment frag = EditWorkoutFragment.newInstance(mWorkoutId, mTitle);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, frag);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void renameWorkout() {
