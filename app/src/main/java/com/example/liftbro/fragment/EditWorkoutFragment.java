@@ -1,5 +1,7 @@
 package com.example.liftbro.fragment;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,16 +20,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.liftbro.data.LiftContract;
-import com.example.liftbro.model.DummyExercise;
+import com.example.liftbro.dialog.EditExerciseDialogFragment;
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.EditExerciseAdapter;
 
-import java.util.Arrays;
-import java.util.List;
-
-public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -71,6 +71,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
         mAdapter = new EditExerciseAdapter(getContext());
         mAdapter.setHasStableIds(true);
+        mAdapter.setOnClickListener(this);
         rvExercises.setAdapter(mAdapter);
         getLoaderManager().initLoader(2, null, this);
 
@@ -119,5 +120,42 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.setCursor(null);
+    }
+
+    // View.OnClickListener implementation
+    @Override
+    public void onClick(View view) {
+        int position = rvExercises.indexOfChild(view);
+        long id = mAdapter.getItemId(position);
+        final String name = ((TextView)view.findViewById(R.id.tv_exercise_name)).getText().toString();
+
+        Cursor cursor = mAdapter.getCursor();
+        cursor.moveToPosition(position);
+
+        final int sets = cursor.getInt(
+                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_SETS));
+        final int reps = cursor.getInt(
+                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_REPS));
+        final double weight = cursor.getDouble(
+                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_WEIGHT));
+        final int time = cursor.getInt(
+                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_TIME));
+
+        EditExerciseDialogFragment dlg = EditExerciseDialogFragment.newInstance(id, name, sets, reps, weight, time);
+        dlg.setTargetFragment(EditWorkoutFragment.this, 0);
+        dlg.show(getActivity().getSupportFragmentManager(), EditExerciseDialogFragment.EDIT_EXERCISE_DIALOG_TAG);
+    }
+
+    // EditExerciseDialogFragment.EditExerciseListener implementation
+    @Override
+    public void onFinishEdit(long id, int sets, int reps, double weight, int time) {
+        ContentValues values = new ContentValues();
+        values.put(LiftContract.WorkoutExerciseEntry.COLUMN_SETS, sets);
+        values.put(LiftContract.WorkoutExerciseEntry.COLUMN_REPS, reps);
+        values.put(LiftContract.WorkoutExerciseEntry.COLUMN_WEIGHT, weight);
+        values.put(LiftContract.WorkoutExerciseEntry.COLUMN_TIME, time);
+        getActivity().getContentResolver().update(
+                ContentUris.withAppendedId(LiftContract.WorkoutExerciseEntry.CONTENT_URI, id),
+                values, null, null);
     }
 }

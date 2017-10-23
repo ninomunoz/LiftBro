@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.liftbro.data.LiftContract;
-import com.example.liftbro.model.DummyExercise;
 import com.example.liftbro.R;
 import com.example.liftbro.util.FormatUtil;
-
-import java.util.List;
 
 /**
  * Created by i57198 on 9/28/17.
@@ -23,6 +20,7 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
 
     private Context mContext;
     private Cursor mCursor;
+    private View.OnClickListener mOnClickListener;
 
     public EditExerciseAdapter(Context context) {
         mContext = context;
@@ -31,6 +29,7 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
     @Override
     public EditExerciseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_edit_exercise, parent, false);
+        view.setOnClickListener(mOnClickListener);
         return new EditExerciseAdapter.ViewHolder(view);
     }
 
@@ -107,6 +106,10 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
         notifyDataSetChanged();
     }
 
+    public void setOnClickListener(View.OnClickListener listener) {
+        mOnClickListener = listener;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvExerciseName;
@@ -115,9 +118,9 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvExerciseName = (TextView) itemView.findViewById(R.id.tv_exercise_name);
-            tvExerciseSet = (TextView) itemView.findViewById(R.id.tv_exercise_set);
-            tvExerciseWeight = (TextView) itemView.findViewById(R.id.tv_exercise_weight);
+            tvExerciseName = itemView.findViewById(R.id.tv_exercise_name);
+            tvExerciseSet = itemView.findViewById(R.id.tv_exercise_set);
+            tvExerciseWeight = itemView.findViewById(R.id.tv_exercise_weight);
         }
     }
 }
