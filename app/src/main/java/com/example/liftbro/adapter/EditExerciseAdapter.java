@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.liftbro.data.LiftContract;
@@ -115,12 +116,15 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
         public TextView tvExerciseName;
         public TextView tvExerciseSet;
         public TextView tvExerciseWeight;
+        public RelativeLayout viewBackground, viewForeground;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvExerciseName = itemView.findViewById(R.id.tv_exercise_name);
             tvExerciseSet = itemView.findViewById(R.id.tv_exercise_set);
             tvExerciseWeight = itemView.findViewById(R.id.tv_exercise_weight);
+            viewBackground = itemView.findViewById(R.id.view_background);
+            viewForeground = itemView.findViewById(R.id.view_foreground);
         }
     }
 }

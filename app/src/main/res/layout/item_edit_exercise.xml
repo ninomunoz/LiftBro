@@ -1,57 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:layout_margin="8dp">
+    android:layout_height="wrap_content">
 
-    <!-- v2: Reorder items -->
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:gravity="center_vertical">-->
+    <RelativeLayout
+        android:id="@+id/view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="@android:color/holo_red_light">
 
-        <!--<ImageView-->
-            <!--android:id="@+id/iv_reorder"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/ic_reorder"-->
-            <!--android:tint="@android:color/darker_gray"-->
-            <!--android:paddingRight="16dp" />-->
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="@dimen/ic_delete"
+            android:layout_height="@dimen/ic_delete"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_delete" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_exercise_name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="24sp" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/ivDelete"
+            android:text="@string/delete_all_caps"
+            android:textColor="@android:color/white"
+            android:textSize="13dp" />
+    </RelativeLayout>
 
-    <!--</LinearLayout>-->
-
-    <TextView
-        android:id="@+id/tv_exercise_name"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/view_foreground"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:padding="16dp"
+        android:background="?android:colorBackground">
 
-    <TextView
-        android:id="@+id/tv_exercise_set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"/>
-    <TextView
-        android:id="@+id/tv_exercise_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_below="@id/tv_exercise_set"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        <TextView
+            android:id="@+id/tv_exercise_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_exercise_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"/>
+        <TextView
+            android:id="@+id/tv_exercise_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_below="@id/tv_exercise_set"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

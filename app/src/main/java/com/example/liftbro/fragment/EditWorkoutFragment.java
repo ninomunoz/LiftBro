@@ -15,19 +15,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.EditExerciseDialogFragment;
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.EditExerciseAdapter;
+import com.example.liftbro.helper.ExerciseSwipeHelper;
 
-public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener {
+public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener, ExerciseSwipeHelper.ExerciseSwipeListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -74,6 +77,10 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         mAdapter.setOnClickListener(this);
         rvExercises.setAdapter(mAdapter);
         getLoaderManager().initLoader(2, null, this);
+
+        // Add swipe helper
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ExerciseSwipeHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvExercises);
 
         // Hook up FAB
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab_add_exercise);
@@ -157,5 +164,14 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         getActivity().getContentResolver().update(
                 ContentUris.withAppendedId(LiftContract.WorkoutExerciseEntry.CONTENT_URI, id),
                 values, null, null);
+    }
+
+    // ExerciseSwipeHelper.ExerciseSwipeListener implementation
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        long id = mAdapter.getItemId(position);
+        getActivity().getContentResolver().delete(
+                ContentUris.withAppendedId(LiftContract.WorkoutExerciseEntry.CONTENT_URI, id),
+                null, null);
     }
 }
