@@ -261,7 +261,6 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                     mChronometer.stop();
                 }
                 else { // reset
-                    tvStop.setText(getString(R.string.stop));
                     mChronometer.setBase(SystemClock.elapsedRealtime());
                     mTimeWhenStopped = 0;
                     tvStop.setOnClickListener(null);
