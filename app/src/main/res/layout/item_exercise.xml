@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
+        android:layout_toLeftOf="@+id/tv_exercise_set"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true" />
 
