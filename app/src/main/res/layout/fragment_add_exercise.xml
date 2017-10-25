@@ -29,4 +29,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/rbSetsReps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rb_sets_reps"
+            style="?android:attr/spinnerDropDownItemStyle"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rbTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/spinnerDropDownItemStyle"
+            android:text="@string/time"
+            android:checked="false"/>
+
+    </RadioGroup>
+
 </LinearLayout>

@@ -1,8 +1,11 @@
 package com.example.liftbro.fragment;
 
-
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,26 +13,47 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.example.liftbro.R;
+import com.example.liftbro.async.FilterExercisesTask;
+import com.example.liftbro.data.LiftContract;
+import com.example.liftbro.dialog.AddExerciseDialogFragment;
 
-import java.util.Arrays;
-import java.util.List;
+import static com.example.liftbro.data.LiftContract.ExerciseEntry;
+import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddExerciseFragment extends Fragment {
+public class AddExerciseFragment extends Fragment implements AddExerciseDialogFragment.AddExerciseListener {
 
+    private static final String ARG_WORKOUT_ID = "workoutId";
+
+    private int mWorkoutId;
+    private Spinner mSpinnerMuscleGroup;
+    private Spinner mSpinnerExercise;
+    private RadioButton rbTime;
 
     public AddExerciseFragment() {
         // Required empty public constructor
     }
 
-    public static AddExerciseFragment newInstance() { return new AddExerciseFragment(); }
+    public static AddExerciseFragment newInstance(int workoutId) {
+        AddExerciseFragment frag = new AddExerciseFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_WORKOUT_ID, workoutId);
+        frag.setArguments(args);
+        return frag;
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        mWorkoutId = getArguments().getInt(ARG_WORKOUT_ID);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,22 +63,26 @@ public class AddExerciseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_exercise, container, false);
 
         // Set up muscle group spinner
-        Spinner spinnerMuscleGroup = (Spinner)view.findViewById(R.id.spinnerMuscleGroup);
-        ArrayAdapter<String> muscleGroupAdapter = new ArrayAdapter<String>(getActivity(),
-                                                    android.R.layout.simple_spinner_dropdown_item,
-                                                    getResources().getStringArray(R.array.muscle_array));
-        muscleGroupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMuscleGroup.setAdapter(muscleGroupAdapter);
+        mSpinnerMuscleGroup = view.findViewById(R.id.spinnerMuscleGroup);
+        loadMuscleGroups();
 
-        // Set up exercise spinner
-        Spinner spinnerExercise = (Spinner)view.findViewById(R.id.spinnerExercise);
-        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<String>(getActivity(),
-                                                    android.R.layout.simple_spinner_dropdown_item,
-                                                    getDummyExercises());
-        exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerExercise.setAdapter(exerciseAdapter);
+        mSpinnerExercise = view.findViewById(R.id.spinnerExercise);
+        rbTime = view.findViewById(R.id.rbTime);
 
-        // Inflate the layout for this fragment
+        // Hook up muscle group selection listener
+        mSpinnerMuscleGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Cursor cursor = (Cursor)mSpinnerMuscleGroup.getSelectedItem();
+                long id = cursor.getLong(cursor.getColumnIndex(LiftContract.MuscleGroupEntry._ID));
+                FilterExercisesTask filterTask = new FilterExercisesTask(AddExerciseFragment.this);
+                filterTask.execute(id);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
         return view;
     }
 
@@ -70,7 +98,7 @@ public class AddExerciseFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miDone:
-                // TODO: Add exercise to workout
+                addExercise();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -81,20 +109,80 @@ public class AddExerciseFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Exercise");
     }
 
-    private List<String> getDummyExercises() {
-        return Arrays.asList(
-                "Barbell Reverse Curl",
-                "Barbell Reverse Preacher Curl",
-                "Cable Reverse Grip Curl",
-                "Cable Reverse Preacher Curl",
-                "Cable Wrist Curl",
-                "Dumbbell Reverse Preacher Curl",
-                "Dumbbell Reverse Wrist Curl",
-                "EZ Bar Reverse Grip Preacher Curl",
-                "Modified Pushup to Forearms",
-                "Smith Machine Seated Wrist Curl",
-                "Wrist Circles"
+    private void loadMuscleGroups() {
+        Cursor cursor = getActivity().getContentResolver().query(
+                LiftContract.MuscleGroupEntry.CONTENT_URI,
+                null, null, null,
+                LiftContract.MuscleGroupEntry.COLUMN_NAME
         );
+
+        SimpleCursorAdapter muscleGroupAdapter = new SimpleCursorAdapter(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                cursor,
+                new String[] { LiftContract.MuscleGroupEntry.COLUMN_NAME }, // fromColumn
+                new int[] { android.R.id.text1 }, // toView
+                0
+        );
+
+        muscleGroupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerMuscleGroup.setAdapter(muscleGroupAdapter);
     }
 
+    public void loadExercises(Cursor cursor) {
+        SimpleCursorAdapter exerciseAdapter = new SimpleCursorAdapter(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                cursor,
+                new String[] { LiftContract.ExerciseEntry.COLUMN_NAME }, // fromColumn
+                new int[] { android.R.id.text1 }, // toView
+                0
+        );
+
+        exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerExercise.setAdapter(exerciseAdapter);
+    }
+
+    private void addExercise() {
+        Cursor cursor = (Cursor)mSpinnerExercise.getSelectedItem();
+        String name = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_NAME));
+
+        AddExerciseDialogFragment dlg = AddExerciseDialogFragment.newInstance(name, rbTime.isChecked());
+        dlg.setTargetFragment(AddExerciseFragment.this, 0);
+        dlg.show(getActivity().getSupportFragmentManager(), AddExerciseDialogFragment.ADD_EXERCISE_DIALOG_TAG);
+    }
+
+    @Override
+    public void onFinishAdd(int sets, int reps, double weight) {
+        Cursor cursor = (Cursor)mSpinnerExercise.getSelectedItem();
+        long exerciseId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry._ID));
+
+        ContentValues values = new ContentValues();
+        values.put(WorkoutExerciseEntry.COLUMN_WORKOUT_ID, mWorkoutId);
+        values.put(WorkoutExerciseEntry.COLUMN_EXERCISE_ID, exerciseId);
+        values.put(WorkoutExerciseEntry.COLUMN_SETS, sets);
+        values.put(WorkoutExerciseEntry.COLUMN_REPS, reps);
+        values.put(WorkoutExerciseEntry.COLUMN_WEIGHT, weight);
+        values.put(WorkoutExerciseEntry.COLUMN_TIME, 0);
+
+        getActivity().getContentResolver().insert(WorkoutExerciseEntry.CONTENT_URI, values);
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onFinishAdd(int time) {
+        Cursor cursor = (Cursor)mSpinnerExercise.getSelectedItem();
+        long exerciseId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry._ID));
+
+        ContentValues values = new ContentValues();
+        values.put(WorkoutExerciseEntry.COLUMN_WORKOUT_ID, mWorkoutId);
+        values.put(WorkoutExerciseEntry.COLUMN_EXERCISE_ID, exerciseId);
+        values.put(WorkoutExerciseEntry.COLUMN_SETS, 0);
+        values.put(WorkoutExerciseEntry.COLUMN_REPS, 0);
+        values.put(WorkoutExerciseEntry.COLUMN_WEIGHT, 0);
+        values.put(WorkoutExerciseEntry.COLUMN_TIME, time);
+
+        getActivity().getContentResolver().insert(WorkoutExerciseEntry.CONTENT_URI, values);
+        getActivity().onBackPressed();
+    }
 }

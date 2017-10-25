@@ -22,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.EditExerciseDialogFragment;
@@ -37,7 +36,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
 
     private String mTitle;
     private int mWorkoutId;
-    EditExerciseAdapter mAdapter;
+    private EditExerciseAdapter mAdapter;
     private RecyclerView rvExercises;
 
     public EditWorkoutFragment() {
@@ -87,7 +86,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddExerciseFragment frag = AddExerciseFragment.newInstance();
+                AddExerciseFragment frag = AddExerciseFragment.newInstance(mWorkoutId);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, frag);
                 transaction.addToBackStack(null);
