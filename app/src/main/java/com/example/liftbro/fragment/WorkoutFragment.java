@@ -1,10 +1,13 @@
 package com.example.liftbro.fragment;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -98,6 +101,20 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     public void onAdd(String workoutName) {
         ContentValues values = new ContentValues();
         values.put(LiftContract.WorkoutEntry.COLUMN_NAME, workoutName);
-        getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
+        Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
+        int workoutId = (int)ContentUris.parseId(uri);
+        getLoaderManager().restartLoader(0, null, this);
+
+        WorkoutDetailFragment detailFrag = WorkoutDetailFragment.newInstance(workoutId, workoutName);
+        FragmentTransaction detailTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        detailTransaction.replace(R.id.fragment_container, detailFrag);
+        detailTransaction.addToBackStack(null);
+        detailTransaction.commit();
+
+        EditWorkoutFragment editFrag = EditWorkoutFragment.newInstance(workoutId, workoutName);
+        FragmentTransaction editTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        editTransaction.replace(R.id.fragment_container, editFrag);
+        editTransaction.addToBackStack(null);
+        editTransaction.commit();
     }
 }
