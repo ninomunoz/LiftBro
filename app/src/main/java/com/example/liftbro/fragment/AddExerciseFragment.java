@@ -19,11 +19,11 @@ import android.widget.Spinner;
 
 import com.example.liftbro.R;
 import com.example.liftbro.async.FilterExercisesTask;
-import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.AddExerciseDialogFragment;
 
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
+import static com.example.liftbro.data.LiftContract.MuscleGroupEntry;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +74,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Cursor cursor = (Cursor)mSpinnerMuscleGroup.getSelectedItem();
-                long id = cursor.getLong(cursor.getColumnIndex(LiftContract.MuscleGroupEntry._ID));
+                long id = cursor.getLong(cursor.getColumnIndex(MuscleGroupEntry._ID));
                 FilterExercisesTask filterTask = new FilterExercisesTask(AddExerciseFragment.this);
                 filterTask.execute(id);
             }
@@ -111,16 +111,16 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
 
     private void loadMuscleGroups() {
         Cursor cursor = getActivity().getContentResolver().query(
-                LiftContract.MuscleGroupEntry.CONTENT_URI,
+                MuscleGroupEntry.CONTENT_URI,
                 null, null, null,
-                LiftContract.MuscleGroupEntry.COLUMN_NAME
+                MuscleGroupEntry.COLUMN_NAME
         );
 
         SimpleCursorAdapter muscleGroupAdapter = new SimpleCursorAdapter(
                 getContext(),
                 android.R.layout.simple_spinner_item,
                 cursor,
-                new String[] { LiftContract.MuscleGroupEntry.COLUMN_NAME }, // fromColumn
+                new String[] { MuscleGroupEntry.COLUMN_NAME }, // fromColumn
                 new int[] { android.R.id.text1 }, // toView
                 0
         );
@@ -134,7 +134,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
                 getContext(),
                 android.R.layout.simple_spinner_item,
                 cursor,
-                new String[] { LiftContract.ExerciseEntry.COLUMN_NAME }, // fromColumn
+                new String[] { ExerciseEntry.COLUMN_NAME }, // fromColumn
                 new int[] { android.R.id.text1 }, // toView
                 0
         );
