@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
-import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
 import com.example.liftbro.dialog.DeleteWorkoutDialogFragment;
@@ -34,6 +33,7 @@ import com.example.liftbro.util.FormatUtil;
 
 import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
+import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
 public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener, View.OnClickListener {
@@ -165,7 +165,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
             String[] selectionArgs = { Integer.toString(exerciseId) };
 
             Cursor exerciseCursor = getContext().getContentResolver().query(
-                    LiftContract.ExerciseEntry.CONTENT_URI,
+                    ExerciseEntry.CONTENT_URI,
                     projection,
                     selection,
                     selectionArgs,
@@ -203,10 +203,10 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     // LoaderManager.LoaderCallbacks<Cursor> implementation
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        String selection = LiftContract.WorkoutExerciseEntry.COLUMN_WORKOUT_ID + " = ?";
+        String selection = WorkoutExerciseEntry.COLUMN_WORKOUT_ID + " = ?";
         String[] selectionArgs = { Integer.toString(mWorkoutId) };
         return new CursorLoader(getActivity(),
-                LiftContract.WorkoutExerciseEntry.CONTENT_URI,
+                WorkoutExerciseEntry.CONTENT_URI,
                 null, selection, selectionArgs, null);
     }
 
@@ -226,9 +226,9 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         mTitle = newWorkoutName;
         updateToolbar();
         ContentValues values = new ContentValues();
-        values.put(LiftContract.WorkoutEntry.COLUMN_NAME, newWorkoutName);
+        values.put(WorkoutEntry.COLUMN_NAME, newWorkoutName);
         getActivity().getContentResolver().update(
-                ContentUris.withAppendedId(LiftContract.WorkoutEntry.CONTENT_URI, mWorkoutId),
+                ContentUris.withAppendedId(WorkoutEntry.CONTENT_URI, mWorkoutId),
                 values, null, null);
     }
 
@@ -236,7 +236,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onDelete() {
         getActivity().getContentResolver().delete(
-                ContentUris.withAppendedId(LiftContract.WorkoutEntry.CONTENT_URI, mWorkoutId),
+                ContentUris.withAppendedId(WorkoutEntry.CONTENT_URI, mWorkoutId),
                 null, null);
         getActivity().onBackPressed();
     }
