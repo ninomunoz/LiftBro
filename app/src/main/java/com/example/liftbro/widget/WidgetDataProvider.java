@@ -8,6 +8,8 @@ import android.os.Binder;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.example.liftbro.activity.MainActivity;
+
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
 /**
@@ -65,6 +67,11 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         if (mCursor.moveToPosition(position)) {
             String workoutName = mCursor.getString(mCursor.getColumnIndex(WorkoutEntry.COLUMN_NAME));
             remoteViews.setTextViewText(android.R.id.text1, workoutName);
+
+            Intent intent = new Intent();
+            intent.putExtra(MainActivity.INTENT_EXTRA_WORKOUT_ID, getItemId(position));
+            intent.putExtra(MainActivity.INTENT_EXTRA_WORKOUT_NAME, workoutName);
+            remoteViews.setOnClickFillInIntent(android.R.id.text1, intent);
         }
 
         return remoteViews;
