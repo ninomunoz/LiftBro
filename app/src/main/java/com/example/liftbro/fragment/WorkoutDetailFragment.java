@@ -177,44 +177,45 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private void shareWorkout() {
         String shareMsg = String.format(getString(R.string.share_msg), mTitle);
         Cursor cursor = mAdapter.getCursor();
-        cursor.moveToFirst();
 
-        do {
-            final int exerciseId = cursor.getInt(
-                cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
+        if (cursor.moveToFirst()) {
+            do {
+                final int exerciseId = cursor.getInt(
+                        cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
 
-            String[] projection = { ExerciseEntry.COLUMN_NAME };
-            String selection = ExerciseEntry._ID + " = ?";
-            String[] selectionArgs = { Integer.toString(exerciseId) };
+                String[] projection = { ExerciseEntry.COLUMN_NAME };
+                String selection = ExerciseEntry._ID + " = ?";
+                String[] selectionArgs = { Integer.toString(exerciseId) };
 
-            Cursor exerciseCursor = getContext().getContentResolver().query(
-                    ExerciseEntry.CONTENT_URI,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null
-            );
-            exerciseCursor.moveToFirst();
+                Cursor exerciseCursor = getContext().getContentResolver().query(
+                        ExerciseEntry.CONTENT_URI,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null
+                );
+                exerciseCursor.moveToFirst();
 
-            final String name = exerciseCursor.getString(
-                    exerciseCursor.getColumnIndex(ExerciseEntry.COLUMN_NAME));
-            final int sets = cursor.getInt(
-                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_SETS));
-            final int reps = cursor.getInt(
-                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_REPS));
-            final double weight = cursor.getDouble(
-                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_WEIGHT));
-            final int time = cursor.getInt(
-                    cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_TIME));
+                final String name = exerciseCursor.getString(
+                        exerciseCursor.getColumnIndex(ExerciseEntry.COLUMN_NAME));
+                final int sets = cursor.getInt(
+                        cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_SETS));
+                final int reps = cursor.getInt(
+                        cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_REPS));
+                final double weight = cursor.getDouble(
+                        cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_WEIGHT));
+                final int time = cursor.getInt(
+                        cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_TIME));
 
-            String msgSetsReps = FormatUtil.formatSetsReps(sets, reps);
-            String msgWeightTime = time > 0 ?
-                    FormatUtil.formatTime(time) :
-                    FormatUtil.formatWeight(weight);
+                String msgSetsReps = FormatUtil.formatSetsReps(sets, reps);
+                String msgWeightTime = time > 0 ?
+                        FormatUtil.formatTime(time) :
+                        FormatUtil.formatWeight(weight);
 
-            shareMsg += name + ": " + msgSetsReps + ", " + msgWeightTime + "\n";
+                shareMsg += name + ": " + msgSetsReps + ", " + msgWeightTime + "\n";
+            }
+            while (cursor.moveToNext());
         }
-        while (cursor.moveToNext());
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
