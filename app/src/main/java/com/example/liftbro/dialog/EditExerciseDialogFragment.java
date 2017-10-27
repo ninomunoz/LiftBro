@@ -12,6 +12,9 @@ import android.widget.NumberPicker;
 
 import com.example.liftbro.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by i57198 on 10/22/17.
  */
@@ -33,6 +36,12 @@ public class EditExerciseDialogFragment extends DialogFragment {
     private int  mReps;
     private double mWeight;
     private int mTime;
+
+    @Nullable @BindView(R.id.np_sets) NumberPicker npSets;
+    @Nullable @BindView(R.id.np_reps) NumberPicker npReps;
+    @Nullable @BindView(R.id.np_weight) NumberPicker npWeight;
+    @Nullable @BindView(R.id.np_time) NumberPicker npTime;
+    @Nullable @BindView(R.id.np_time_unit) NumberPicker npTimeUnit;
 
     public static EditExerciseDialogFragment newInstance(long id, String name, int sets, int reps, double weight, int time) {
         EditExerciseDialogFragment frag = new EditExerciseDialogFragment();
@@ -73,23 +82,22 @@ public class EditExerciseDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (mTime == 0) {
             final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit_exercise_weight, null, false);
+            ButterKnife.bind(this, view);
 
-            final NumberPicker npSets = view.findViewById(R.id.np_sets);
             npSets.setMinValue(1);
             npSets.setMaxValue(10);
             npSets.setValue(mSets);
 
-            final NumberPicker npReps = view.findViewById(R.id.np_reps);
             npReps.setMinValue(1);
             npReps.setMaxValue(50);
             npReps.setValue(mReps);
 
-            final NumberPicker npWeight = view.findViewById(R.id.np_weight);
             final String[] weightValues = new String[101];
             for (int i = 0; i < weightValues.length; i++) {
                 String weight = Integer.toString(i * 5);
                 weightValues[i] = i == 0 ? "BW" : weight;
             }
+
             npWeight.setMinValue(0);
             npWeight.setMaxValue(100);
             npWeight.setDisplayedValues(weightValues);
@@ -121,18 +129,17 @@ public class EditExerciseDialogFragment extends DialogFragment {
         }
         else {
             final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_edit_exercise_time, null, false);
+            ButterKnife.bind(this, view);
             boolean isMinutes = mTime >= 60;
 
-            final NumberPicker npValue = view.findViewById(R.id.np_time);
-            npValue.setMinValue(1);
-            npValue.setMaxValue(59);
-            npValue.setValue(isMinutes ? mTime / 60 : mTime);
+            npTime.setMinValue(1);
+            npTime.setMaxValue(59);
+            npTime.setValue(isMinutes ? mTime / 60 : mTime);
 
-            final NumberPicker npUnit = view.findViewById(R.id.np_time_unit);
-            npUnit.setMinValue(0);
-            npUnit.setMaxValue(1);
-            npUnit.setValue(isMinutes ? 1 : 0);
-            npUnit.setDisplayedValues(getResources().getStringArray(R.array.np_time_array));
+            npTimeUnit.setMinValue(0);
+            npTimeUnit.setMaxValue(1);
+            npTimeUnit.setValue(isMinutes ? 1 : 0);
+            npTimeUnit.setDisplayedValues(getResources().getStringArray(R.array.np_time_array));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(mExerciseName);
@@ -141,8 +148,8 @@ public class EditExerciseDialogFragment extends DialogFragment {
             builder.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    mTime = npValue.getValue();
-                    if (npUnit.getValue() == 1) {
+                    mTime = npTime.getValue();
+                    if (npTimeUnit.getValue() == 1) {
                         mTime *= 60;
                     }
                     mListener.onFinishEdit(mId, mSets, mReps, mWeight, mTime);
