@@ -40,6 +40,9 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
+    private static final String ARG_STOPWATCH_TIME = "stopwatchTime";
+    private static final String ARG_IS_STOPWATCH_RUNNING = "isStopwatchRunning";
+    private static final String ARG_TIME_WHEN_STOPPED = "timeWhenStopped";
 
     private String mTitle;
     private int mWorkoutId;
@@ -49,6 +52,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private TextView tvStart;
     private TextView tvStop;
     private long mTimeWhenStopped = 0;
+    private boolean mIsStopwatchRunning;
 
     public WorkoutDetailFragment() {
         // Required empty public constructor
@@ -88,12 +92,23 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         getLoaderManager().initLoader(1, null, this);
 
         mChronometer = view.findViewById(R.id.chronometer);
-
         tvStart = view.findViewById(R.id.tv_start);
         tvStart.setOnClickListener(this);
         tvStart.setTextColor(Color.GREEN);
         tvStop = view.findViewById(R.id.tv_stop);
         tvStop.setTextColor(Color.RED);
+
+        if (savedInstanceState != null) {
+            mTimeWhenStopped = savedInstanceState.getLong(ARG_TIME_WHEN_STOPPED);
+            mIsStopwatchRunning = savedInstanceState.getBoolean(ARG_IS_STOPWATCH_RUNNING);
+
+            if (mIsStopwatchRunning) {
+                startStopwatch(savedInstanceState.getLong(ARG_STOPWATCH_TIME));
+            }
+            else {
+                mChronometer.setBase(SystemClock.elapsedRealtime() + mTimeWhenStopped);
+            }
+        }
 
         return view;
     }
@@ -124,6 +139,14 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(ARG_STOPWATCH_TIME, mChronometer.getBase());
+        outState.putBoolean(ARG_IS_STOPWATCH_RUNNING, mIsStopwatchRunning);
+        outState.putLong(ARG_TIME_WHEN_STOPPED, mTimeWhenStopped);
     }
 
     private void updateToolbar() {
@@ -200,6 +223,30 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         startActivity(sendIntent);
     }
 
+    private void startStopwatch(long base) {
+        mChronometer.setBase(base);
+        mChronometer.start();
+        mIsStopwatchRunning = true;
+        tvStart.setTextColor(Color.DKGRAY);
+        tvStart.setOnClickListener(null);
+        tvStop.setText(getString(R.string.stop));
+        tvStop.setOnClickListener(this);
+    }
+
+    private void stopStopwatch() {
+        tvStop.setText(getString(R.string.reset));
+        tvStart.setTextColor(Color.GREEN);
+        mTimeWhenStopped = mChronometer.getBase() - SystemClock.elapsedRealtime();
+        mChronometer.stop();
+        mIsStopwatchRunning = false;
+    }
+
+    private void resetStopwatch() {
+        mChronometer.setBase(SystemClock.elapsedRealtime());
+        mTimeWhenStopped = 0;
+        tvStop.setOnClickListener(null);
+    }
+
     // LoaderManager.LoaderCallbacks<Cursor> implementation
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
@@ -246,24 +293,14 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_start:
-                mChronometer.setBase(SystemClock.elapsedRealtime() + mTimeWhenStopped);
-                mChronometer.start();
-                tvStart.setTextColor(Color.DKGRAY);
-                tvStart.setOnClickListener(null);
-                tvStop.setText(getString(R.string.stop));
-                tvStop.setOnClickListener(this);
+                startStopwatch(SystemClock.elapsedRealtime() + mTimeWhenStopped);
                 break;
             case R.id.tv_stop:
                 if (tvStop.getText().toString().equals(getString(R.string.stop))) { // stop
-                    tvStop.setText(getString(R.string.reset));
-                    tvStart.setTextColor(Color.GREEN);
-                    mTimeWhenStopped = mChronometer.getBase() - SystemClock.elapsedRealtime();
-                    mChronometer.stop();
+                    stopStopwatch();
                 }
                 else { // reset
-                    mChronometer.setBase(SystemClock.elapsedRealtime());
-                    mTimeWhenStopped = 0;
-                    tvStop.setOnClickListener(null);
+                    resetStopwatch();
                 }
                 tvStart.setOnClickListener(this);
                 break;
