@@ -13,6 +13,9 @@ import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.R;
 import com.example.liftbro.util.FormatUtil;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by i57198 on 9/28/17.
  */
@@ -113,18 +116,15 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvExerciseName;
-        public TextView tvExerciseSet;
-        public TextView tvExerciseWeight;
-        public RelativeLayout viewBackground, viewForeground;
+        @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
+        @BindView(R.id.tv_exercise_set) public TextView tvExerciseSet;
+        @BindView(R.id.tv_exercise_weight) public TextView tvExerciseWeight;
+        @BindView(R.id.view_background) public RelativeLayout viewBackground;
+        @BindView(R.id.view_foreground) public RelativeLayout viewForeground;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvExerciseName = itemView.findViewById(R.id.tv_exercise_name);
-            tvExerciseSet = itemView.findViewById(R.id.tv_exercise_set);
-            tvExerciseWeight = itemView.findViewById(R.id.tv_exercise_weight);
-            viewBackground = itemView.findViewById(R.id.view_background);
-            viewForeground = itemView.findViewById(R.id.view_foreground);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

@@ -14,6 +14,9 @@ import com.example.liftbro.activity.MainActivity;
 import com.example.liftbro.R;
 import com.example.liftbro.fragment.WorkoutDetailFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
 /**
@@ -81,13 +84,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     }
 
     public static class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
-        TextView workoutName;
+        @BindView(R.id.cv_workout) CardView cardView;
+        @BindView(R.id.tv_workout_name) TextView workoutName;
 
         WorkoutViewHolder(View itemView) {
             super(itemView);
-            cardView = itemView.findViewById(R.id.cv_workout);
-            workoutName = itemView.findViewById(R.id.tv_workout_name);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

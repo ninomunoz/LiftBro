@@ -12,6 +12,9 @@ import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.R;
 import com.example.liftbro.util.FormatUtil;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 
@@ -110,15 +113,13 @@ public class ExerciseAdapter extends
 
     public class ExerciseViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvExerciseName;
-        public TextView tvExerciseSet;
-        public TextView tvExerciseWeight;
+        @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
+        @BindView(R.id.tv_exercise_set) public TextView tvExerciseSet;
+        @BindView(R.id.tv_exercise_weight) public TextView tvExerciseWeight;
 
         public ExerciseViewHolder(View itemView) {
             super(itemView);
-            tvExerciseName = itemView.findViewById(R.id.tv_exercise_name);
-            tvExerciseSet = itemView.findViewById(R.id.tv_exercise_set);
-            tvExerciseWeight = itemView.findViewById(R.id.tv_exercise_weight);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
