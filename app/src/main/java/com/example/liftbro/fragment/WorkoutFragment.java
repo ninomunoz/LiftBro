@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
@@ -101,20 +102,26 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     public void onAdd(String workoutName) {
         ContentValues values = new ContentValues();
         values.put(LiftContract.WorkoutEntry.COLUMN_NAME, workoutName);
-        Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
-        int workoutId = (int)ContentUris.parseId(uri);
-        getLoaderManager().restartLoader(0, null, this);
 
-        WorkoutDetailFragment detailFrag = WorkoutDetailFragment.newInstance(workoutId, workoutName);
-        FragmentTransaction detailTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        detailTransaction.replace(R.id.fragment_container, detailFrag);
-        detailTransaction.addToBackStack(null);
-        detailTransaction.commit();
+        try {
+            Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
+            int workoutId = (int)ContentUris.parseId(uri);
+            getLoaderManager().restartLoader(0, null, this);
 
-        EditWorkoutFragment editFrag = EditWorkoutFragment.newInstance(workoutId, workoutName);
-        FragmentTransaction editTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        editTransaction.replace(R.id.fragment_container, editFrag);
-        editTransaction.addToBackStack(null);
-        editTransaction.commit();
+            WorkoutDetailFragment detailFrag = WorkoutDetailFragment.newInstance(workoutId, workoutName);
+            FragmentTransaction detailTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            detailTransaction.replace(R.id.fragment_container, detailFrag);
+            detailTransaction.addToBackStack(null);
+            detailTransaction.commit();
+
+            EditWorkoutFragment editFrag = EditWorkoutFragment.newInstance(workoutId, workoutName);
+            FragmentTransaction editTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            editTransaction.replace(R.id.fragment_container, editFrag);
+            editTransaction.addToBackStack(null);
+            editTransaction.commit();
+        }
+        catch (Exception e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }

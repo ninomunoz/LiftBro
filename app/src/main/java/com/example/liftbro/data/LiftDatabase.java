@@ -98,7 +98,7 @@ public class LiftDatabase extends SQLiteAssetHelper {
         long id = getWritableDatabase().insert(WorkoutEntry.TABLE_NAME, "", values);
 
         if (id <= 0) {
-            throw new SQLException("Failed to add workout");
+            throw new SQLException("Failed to add workout. Name must be unique.");
         }
 
         return id;
