@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String INTENT_EXTRA_WORKOUT_NAME = "INTENT_EXTRA_WORKOUT_NAME";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    private boolean mIsDualPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,23 +31,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (findViewById(R.id.fragment_container) != null) {
-            if (savedInstanceState == null) {
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    // Launched from widget - show workout details
-                    long id = extras.getLong(INTENT_EXTRA_WORKOUT_ID);
-                    String name = extras.getString(INTENT_EXTRA_WORKOUT_NAME);
-                    WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance((int)id, name);
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.fragment_container, newFragment).commit();
-                }
-                else {
-                    // Add workout fragment to fragment container
-                    WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.fragment_container, workoutFragment).commit();
-                }
+        mIsDualPane = findViewById(R.id.fragment_workout) != null;
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+
+            // Add workout fragment
+            if (mIsDualPane) {
+                WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_workout, workoutFragment).commit();
+            }
+            else {
+                WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, workoutFragment).commit();
+            }
+
+            if (extras != null) {
+                // Launched from widget - show workout details
+                long id = extras.getLong(INTENT_EXTRA_WORKOUT_ID);
+                String name = extras.getString(INTENT_EXTRA_WORKOUT_NAME);
+                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance((int)id, name);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.fragment_container, newFragment).commit();
             }
         }
 
