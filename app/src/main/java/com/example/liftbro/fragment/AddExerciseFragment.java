@@ -21,6 +21,9 @@ import com.example.liftbro.R;
 import com.example.liftbro.async.FilterExercisesTask;
 import com.example.liftbro.dialog.AddExerciseDialogFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 import static com.example.liftbro.data.LiftContract.MuscleGroupEntry;
@@ -32,10 +35,11 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
 
     private static final String ARG_WORKOUT_ID = "workoutId";
 
+    @BindView(R.id.spinnerMuscleGroup) Spinner mSpinnerMuscleGroup;
+    @BindView(R.id.spinnerExercise) Spinner mSpinnerExercise;
+    @BindView(R.id.rbTime) RadioButton rbTime;
+
     private int mWorkoutId;
-    private Spinner mSpinnerMuscleGroup;
-    private Spinner mSpinnerExercise;
-    private RadioButton rbTime;
 
     public AddExerciseFragment() {
         // Required empty public constructor
@@ -61,13 +65,9 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
 
         updateToolbar();
         View view = inflater.inflate(R.layout.fragment_add_exercise, container, false);
+        ButterKnife.bind(this, view);
 
-        // Set up muscle group spinner
-        mSpinnerMuscleGroup = view.findViewById(R.id.spinnerMuscleGroup);
         loadMuscleGroups();
-
-        mSpinnerExercise = view.findViewById(R.id.spinnerExercise);
-        rbTime = view.findViewById(R.id.rbTime);
 
         // Hook up muscle group selection listener
         mSpinnerMuscleGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -24,11 +24,16 @@ import com.example.liftbro.adapter.WorkoutAdapter;
 import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.AddWorkoutDialogFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
 public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AddWorkoutDialogFragment.AddWorkoutListener {
 
-    RecyclerView mRecyclerView;
+    @BindView(R.id.rv_workouts) RecyclerView mRecyclerView;
+    @BindView(R.id.fab_add_workout) FloatingActionButton mFab;
+
     WorkoutAdapter mAdapter;
 
     public WorkoutFragment() {
@@ -50,9 +55,10 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
         updateToolbar();
 
-        // Set up recycler view
         View view = inflater.inflate(R.layout.fragment_workout, container, false);
-        mRecyclerView = view.findViewById(R.id.rv_workouts);
+        ButterKnife.bind(this, view);
+
+        // Set up recycler view
         GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
         mRecyclerView.setLayoutManager(glm);
         mAdapter = new WorkoutAdapter(getActivity());
@@ -61,8 +67,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         getLoaderManager().initLoader(0, null, this);
 
         // Hook up FAB
-        FloatingActionButton fab = view.findViewById(R.id.fab_add_workout);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AddWorkoutDialogFragment dlg = new AddWorkoutDialogFragment();
@@ -70,6 +75,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 dlg.show(getActivity().getSupportFragmentManager(), AddWorkoutDialogFragment.ADD_WORKOUT_DIALOG_TAG);
             }
         });
+
         return view;
     }
 

@@ -29,15 +29,20 @@ import com.example.liftbro.R;
 import com.example.liftbro.adapter.EditExerciseAdapter;
 import com.example.liftbro.helper.ExerciseSwipeHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener, ExerciseSwipeHelper.ExerciseSwipeListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
 
+    @BindView(R.id.rv_exercises) RecyclerView rvExercises;
+    @BindView(R.id.fab_add_exercise) FloatingActionButton mFab;
+
     private String mTitle;
     private int mWorkoutId;
     private EditExerciseAdapter mAdapter;
-    private RecyclerView rvExercises;
 
     public EditWorkoutFragment() {
         // Required empty public constructor
@@ -64,10 +69,10 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_workout, container, false);
+        ButterKnife.bind(this, view);
         updateToolbar();
 
         // Set up recycler view
-        rvExercises = (RecyclerView)view.findViewById(R.id.rv_exercises);
         LinearLayoutManager glm = new LinearLayoutManager(getActivity());
         rvExercises.setLayoutManager(glm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
@@ -82,8 +87,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvExercises);
 
         // Hook up FAB
-        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab_add_exercise);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AddExerciseFragment frag = AddExerciseFragment.newInstance(mWorkoutId);

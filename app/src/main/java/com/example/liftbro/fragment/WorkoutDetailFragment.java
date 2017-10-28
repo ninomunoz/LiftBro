@@ -31,6 +31,9 @@ import com.example.liftbro.dialog.DeleteWorkoutDialogFragment;
 import com.example.liftbro.dialog.RenameWorkoutDialogFragment;
 import com.example.liftbro.util.FormatUtil;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.liftbro.data.LiftContract.WorkoutExerciseEntry;
 import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
@@ -44,13 +47,15 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private static final String ARG_IS_STOPWATCH_RUNNING = "isStopwatchRunning";
     private static final String ARG_TIME_WHEN_STOPPED = "timeWhenStopped";
 
+    @BindView(R.id.rv_exercises) RecyclerView rvExercises;
+    @BindView(R.id.chronometer) Chronometer mChronometer;
+    @BindView(R.id.tv_start) TextView tvStart;
+    @BindView(R.id.tv_stop) TextView tvStop;
+
     private String mTitle;
     private int mWorkoutId;
-    private RecyclerView rvExercises;
     private ExerciseAdapter mAdapter;
-    private Chronometer mChronometer;
-    private TextView tvStart;
-    private TextView tvStop;
+
     private long mTimeWhenStopped = 0;
     private boolean mIsStopwatchRunning;
 
@@ -79,10 +84,10 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_workout_detail, container, false);
+        ButterKnife.bind(this, view);
         updateToolbar();
 
         // Set up recycler view
-        rvExercises = view.findViewById(R.id.rv_exercises);
         LinearLayoutManager glm = new LinearLayoutManager(getActivity());
         rvExercises.setLayoutManager(glm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
@@ -91,11 +96,8 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         rvExercises.setAdapter(mAdapter);
         getLoaderManager().initLoader(1, null, this);
 
-        mChronometer = view.findViewById(R.id.chronometer);
-        tvStart = view.findViewById(R.id.tv_start);
         tvStart.setOnClickListener(this);
         tvStart.setTextColor(Color.GREEN);
-        tvStop = view.findViewById(R.id.tv_stop);
         tvStop.setTextColor(Color.RED);
 
         if (savedInstanceState != null) {
