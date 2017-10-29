@@ -7,7 +7,6 @@
 
     <!-- Invite -->
     <string name="invite_msg">"Check out LiftBro on GitHub!\n\nhttps://github.com/ninomunoz/LiftBro"</string>
-    <string name="chooser_msg">Share this app using:</string>
 
     <!-- AddExerciseFragment -->
     <string name="muscle_group">Muscle Group</string>
@@ -54,20 +53,6 @@
     <string-array name="np_time_array">
         <item>sec</item>
         <item>min</item>
-    </string-array>
-
-    <string-array name="muscle_array">
-        <item>Abs</item>
-        <item>Back</item>
-        <item>Biceps</item>
-        <item>Cardio</item>
-        <item>Chest</item>
-        <item>Forearm</item>
-        <item>Glutes</item>
-        <item>Lower Leg</item>
-        <item>Shoulders</item>
-        <item>Triceps</item>
-        <item>Upper Leg</item>
     </string-array>
 
 </resources>
