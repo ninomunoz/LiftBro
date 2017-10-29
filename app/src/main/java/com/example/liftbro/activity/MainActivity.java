@@ -1,6 +1,7 @@
 package com.example.liftbro.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,13 @@ import com.example.liftbro.R;
 import com.example.liftbro.dialog.AboutDialogFragment;
 import com.example.liftbro.fragment.WorkoutDetailFragment;
 import com.example.liftbro.fragment.WorkoutFragment;
+import com.google.android.gms.appinvite.AppInviteInvitation;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String INTENT_EXTRA_WORKOUT_ID = "INTENT_EXTRA_WORKOUT_ID";
     public static final String INTENT_EXTRA_WORKOUT_NAME = "INTENT_EXTRA_WORKOUT_NAME";
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int REQUEST_INVITE = 1;
 
     private boolean mIsDualPane;
 
@@ -106,14 +108,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void invite() {
-        try {
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("text/plain");
-            i.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-            i.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_msg));
-            startActivity(Intent.createChooser(i, getString(R.string.chooser_msg)));
-        } catch(Exception e) {
-            Log.e(LOG_TAG, e.toString());
-        }
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.app_name))
+                .setMessage(getString(R.string.invite_msg))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
     }
 }
