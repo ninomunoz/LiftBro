@@ -16,38 +16,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sets"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/np_sets" />
+        android:layout_toEndOf="@id/np_sets" />
 
     <NumberPicker
         android:id="@+id/np_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:descendantFocusability="blocksDescendants"
-        android:layout_toRightOf="@id/lbl_sets" />
+        android:layout_toEndOf="@id/lbl_sets" />
 
     <TextView
         android:id="@+id/lbl_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/reps"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/np_reps" />
+        android:layout_toEndOf="@id/np_reps" />
 
     <NumberPicker
         android:id="@+id/np_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:descendantFocusability="blocksDescendants"
-        android:layout_toRightOf="@id/lbl_reps" />
+        android:layout_toEndOf="@id/lbl_reps" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lbs"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/np_weight" />
+        android:layout_toEndOf="@id/np_weight" />
 
 </RelativeLayout>
