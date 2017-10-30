@@ -5,6 +5,7 @@
         android:id="@+id/miDone"
         android:icon="@drawable/ic_done"
         app:showAsAction="always"
+        android:contentDescription="@string/done"
         android:title="@string/done">
     </item>
 </menu>

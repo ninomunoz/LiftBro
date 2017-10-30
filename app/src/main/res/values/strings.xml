@@ -17,6 +17,7 @@
 
     <!-- EditWorkoutFragment -->
     <string name="delete_all_caps">DELETE</string>
+    <string name="add_exercise">Add Exercise</string>
 
     <!-- AddExerciseFragment -->
     <string name="rb_sets_reps">Sets/Reps</string>

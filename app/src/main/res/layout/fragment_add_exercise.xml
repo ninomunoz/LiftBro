@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/muscle_group"
+        android:contentDescription="@string/muscle_group"
         style="@style/InputLabel" />
 
     <Spinner
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/exercise"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/exercise"
         style="@style/InputLabel" />
 
     <Spinner
@@ -39,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rb_sets_reps"
+            android:contentDescription="@string/rb_sets_reps"
             style="?android:attr/spinnerDropDownItemStyle"
             android:checked="true" />
 
@@ -48,8 +51,8 @@
             android:layout_height="wrap_content"
             style="?android:attr/spinnerDropDownItemStyle"
             android:text="@string/time"
+            android:contentDescription="@string/time"
             android:checked="false"/>
-
     </RadioGroup>
 
 </LinearLayout>

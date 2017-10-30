@@ -5,24 +5,28 @@
         android:id="@+id/miEdit"
         android:icon="@drawable/ic_edit"
         app:showAsAction="ifRoom"
+        android:contentDescription="@string/edit"
         android:title="@string/edit">
     </item>
     <item
         android:id="@+id/miShare"
         android:icon="@drawable/ic_share"
         app:showAsAction="ifRoom"
+        android:contentDescription="@string/share"
         android:title="@string/share">
     </item>
     <item
         android:id="@+id/miRename"
         android:icon="@drawable/ic_rename"
         app:showAsAction="ifRoom"
+        android:contentDescription="@string/rename"
         android:title="@string/rename">
     </item>
     <item
         android:id="@+id/miDelete"
         android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom"
+        android:contentDescription="@string/delete"
         android:title="@string/delete">
     </item>
 </menu>

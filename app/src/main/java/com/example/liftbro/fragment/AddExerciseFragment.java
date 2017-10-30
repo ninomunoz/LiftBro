@@ -75,6 +75,8 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Cursor cursor = (Cursor)mSpinnerMuscleGroup.getSelectedItem();
                 long id = cursor.getLong(cursor.getColumnIndex(MuscleGroupEntry._ID));
+                String name = cursor.getString(cursor.getColumnIndex(MuscleGroupEntry.COLUMN_NAME));
+                mSpinnerMuscleGroup.setContentDescription(name);
                 FilterExercisesTask filterTask = new FilterExercisesTask(AddExerciseFragment.this);
                 filterTask.execute(id);
             }
@@ -141,6 +143,17 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
 
         exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerExercise.setAdapter(exerciseAdapter);
+        mSpinnerExercise.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Cursor cursor = (Cursor)mSpinnerExercise.getSelectedItem();
+                String name = cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_NAME));
+                mSpinnerExercise.setContentDescription(name);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
     }
 
     private void addExercise() {
