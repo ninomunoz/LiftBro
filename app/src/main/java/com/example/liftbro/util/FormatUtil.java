@@ -41,4 +41,16 @@ public class FormatUtil {
 
         return formattedSetsReps;
     }
+
+    public static String formatSetsRepsContentDescription(int sets, int reps) {
+        String contentDescription = "";
+        if (sets > 0) {
+            contentDescription = sets + " sets ";
+            if (reps > 0) {
+                contentDescription += + reps + " reps";
+            }
+        }
+
+        return contentDescription;
+    }
 }

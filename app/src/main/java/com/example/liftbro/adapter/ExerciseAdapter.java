@@ -76,13 +76,21 @@ public class ExerciseAdapter extends
         TextView tvExerciseWeight = holder.tvExerciseWeight;
 
         tvExerciseName.setText(name);
+        tvExerciseName.setContentDescription(name);
+
         tvExerciseSet.setText(FormatUtil.formatSetsReps(sets, reps));
+        tvExerciseSet.setContentDescription(FormatUtil.formatSetsRepsContentDescription(sets, reps));
+
 
         if (time > 0) {
-            tvExerciseWeight.setText(FormatUtil.formatTime(time));
+            String timeText = FormatUtil.formatTime(time);
+            tvExerciseWeight.setText(timeText);
+            tvExerciseWeight.setContentDescription(timeText);
         }
         else {
-            tvExerciseWeight.setText(FormatUtil.formatWeight(weight));
+            String weightText = FormatUtil.formatWeight(weight);
+            tvExerciseWeight.setText(weightText);
+            tvExerciseWeight.setContentDescription(weightText);
         }
     }
 

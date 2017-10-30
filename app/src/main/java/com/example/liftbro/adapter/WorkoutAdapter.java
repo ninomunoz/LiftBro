@@ -46,6 +46,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         final String workoutName = mCursor.getString(mCursor.getColumnIndex(WorkoutEntry.COLUMN_NAME));
 
         holder.workoutName.setText(workoutName);
+
+        holder.cardView.setContentDescription(workoutName);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
