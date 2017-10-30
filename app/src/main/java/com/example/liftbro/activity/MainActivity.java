@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
+            long workoutId = 0;
+            if (extras != null) {
+                workoutId = extras.getLong(INTENT_EXTRA_WORKOUT_ID);
+            }
 
             // Add workout fragment
             if (mIsDualPane) {
@@ -50,13 +54,12 @@ public class MainActivity extends AppCompatActivity {
                         .add(R.id.fragment_container, workoutFragment).commit();
             }
 
-            if (extras != null) {
+            if (extras != null && workoutId != 0) {
                 // Launched from widget - show workout details
-                long id = extras.getLong(INTENT_EXTRA_WORKOUT_ID);
                 String name = extras.getString(INTENT_EXTRA_WORKOUT_NAME);
-                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance((int)id, name);
+                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance((int)workoutId, name);
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_container, newFragment).commit();
+                        .replace(R.id.fragment_container, newFragment).commit();
             }
         }
 
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else {
                             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                            getSupportActionBar().setTitle(getString(R.string.app_name));
                         }
                     }
                 }
