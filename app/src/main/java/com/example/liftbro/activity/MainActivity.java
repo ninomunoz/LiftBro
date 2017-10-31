@@ -15,6 +15,7 @@ import com.example.liftbro.R;
 import com.example.liftbro.dialog.AboutDialogFragment;
 import com.example.liftbro.fragment.WorkoutDetailFragment;
 import com.example.liftbro.fragment.WorkoutFragment;
+import com.example.liftbro.util.Analytics;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 
 public class MainActivity extends AppCompatActivity {
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.miAbout:
                 new AboutDialogFragment().show(getSupportFragmentManager(), AboutDialogFragment.ABOUT_DIALOG_TAG);
+                Analytics.logEventViewAbout(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -116,5 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage(getString(R.string.invite_msg))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
+        Analytics.logEventInvite(this);
     }
 }

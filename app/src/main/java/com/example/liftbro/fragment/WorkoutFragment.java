@@ -23,6 +23,7 @@ import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
 import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.AddWorkoutDialogFragment;
+import com.example.liftbro.util.Analytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,6 +114,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
             Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
             int workoutId = (int)ContentUris.parseId(uri);
             getLoaderManager().restartLoader(0, null, this);
+
+            Analytics.logEventAddWorkout(getActivity(), workoutId, workoutName);
 
             WorkoutDetailFragment detailFrag = WorkoutDetailFragment.newInstance(workoutId, workoutName);
             FragmentTransaction detailTransaction = getActivity().getSupportFragmentManager().beginTransaction();

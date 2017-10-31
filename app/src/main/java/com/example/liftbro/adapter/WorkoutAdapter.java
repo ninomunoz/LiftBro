@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.liftbro.activity.MainActivity;
 import com.example.liftbro.R;
 import com.example.liftbro.fragment.WorkoutDetailFragment;
+import com.example.liftbro.util.Analytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +57,8 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
+                Analytics.logEventViewWorkout(mContext, workoutId, workoutName);
             }
         });
     }

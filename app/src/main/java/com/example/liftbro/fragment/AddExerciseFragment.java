@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import com.example.liftbro.R;
 import com.example.liftbro.async.FilterExercisesTask;
 import com.example.liftbro.dialog.AddExerciseDialogFragment;
+import com.example.liftbro.util.Analytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -179,6 +180,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
         values.put(WorkoutExerciseEntry.COLUMN_TIME, 0);
 
         getActivity().getContentResolver().insert(WorkoutExerciseEntry.CONTENT_URI, values);
+        Analytics.logEventAddExercise(getActivity(), exerciseId);
         getActivity().onBackPressed();
     }
 
@@ -196,6 +198,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
         values.put(WorkoutExerciseEntry.COLUMN_TIME, time);
 
         getActivity().getContentResolver().insert(WorkoutExerciseEntry.CONTENT_URI, values);
+        Analytics.logEventAddExercise(getActivity(), exerciseId);
         getActivity().onBackPressed();
     }
 }

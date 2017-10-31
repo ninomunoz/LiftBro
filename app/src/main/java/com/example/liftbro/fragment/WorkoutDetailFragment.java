@@ -29,6 +29,7 @@ import com.example.liftbro.adapter.ExerciseAdapter;
 import com.example.liftbro.R;
 import com.example.liftbro.dialog.DeleteWorkoutDialogFragment;
 import com.example.liftbro.dialog.RenameWorkoutDialogFragment;
+import com.example.liftbro.util.Analytics;
 import com.example.liftbro.util.FormatUtil;
 
 import butterknife.BindView;
@@ -52,7 +53,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     @BindView(R.id.tv_start) TextView tvStart;
     @BindView(R.id.tv_stop) TextView tvStop;
 
-    private String mTitle;
+    private String mWorkoutName;
     private int mWorkoutId;
     private ExerciseAdapter mAdapter;
 
@@ -74,7 +75,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        mTitle = getArguments().getString(ARG_TITLE_KEY);
+        mWorkoutName = getArguments().getString(ARG_TITLE_KEY);
         mWorkoutId = getArguments().getInt(ARG_WORKOUT_ID_KEY);
         super.onCreate(savedInstanceState);
     }
@@ -131,9 +132,11 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 return true;
             case R.id.miShare:
                 shareWorkout();
+                Analytics.logEventShareWorkout(getActivity(), mWorkoutId, mWorkoutName);
                 return true;
             case R.id.miDelete:
                 deleteWorkout();
+                Analytics.logEventDeleteWorkout(getActivity(), mWorkoutId, mWorkoutName);
                 return true;
             case R.id.miRename:
                 renameWorkout();
@@ -153,11 +156,11 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
 
     private void updateToolbar() {
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTitle);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mWorkoutName);
     }
 
     private void editWorkout() {
-        EditWorkoutFragment frag = EditWorkoutFragment.newInstance(mWorkoutId, mTitle);
+        EditWorkoutFragment frag = EditWorkoutFragment.newInstance(mWorkoutId, mWorkoutName);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, frag);
         transaction.addToBackStack(null);
@@ -165,7 +168,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void renameWorkout() {
-        RenameWorkoutDialogFragment dlg = RenameWorkoutDialogFragment.newInstance(mTitle);
+        RenameWorkoutDialogFragment dlg = RenameWorkoutDialogFragment.newInstance(mWorkoutName);
         dlg.setTargetFragment(WorkoutDetailFragment.this, 0);
         dlg.show(getActivity().getSupportFragmentManager(), RenameWorkoutDialogFragment.RENAME_WORKOUT_DIALOG_TAG);
     }
@@ -177,7 +180,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void shareWorkout() {
-        String shareMsg = String.format(getString(R.string.share_msg), mTitle);
+        String shareMsg = String.format(getString(R.string.share_msg), mWorkoutName);
         Cursor cursor = mAdapter.getCursor();
 
         if (cursor.moveToFirst()) {
@@ -273,13 +276,14 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     // RenameWorkoutDialogFragment.RenameWorkoutListener implementation
     @Override
     public void onRename(String newWorkoutName) {
-        mTitle = newWorkoutName;
+        mWorkoutName = newWorkoutName;
         updateToolbar();
         ContentValues values = new ContentValues();
         values.put(WorkoutEntry.COLUMN_NAME, newWorkoutName);
         getActivity().getContentResolver().update(
                 ContentUris.withAppendedId(WorkoutEntry.CONTENT_URI, mWorkoutId),
                 values, null, null);
+        Analytics.logEventRenameWorkout(getActivity());
     }
 
     // DeleteWorkoutDialogFragment.DeleteWorkoutListener implementation
@@ -297,6 +301,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         switch (view.getId()) {
             case R.id.tv_start:
                 startStopwatch(SystemClock.elapsedRealtime() + mTimeWhenStopped);
+                Analytics.logEventStartTimer(getActivity());
                 break;
             case R.id.tv_stop:
                 if (tvStop.getText().toString().equals(getString(R.string.stop))) { // stop
