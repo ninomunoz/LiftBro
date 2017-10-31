@@ -14,6 +14,10 @@
 
     <!-- WorkoutDetailFragment -->
     <string name="share_msg">Check out this %1$s workout!\n\n</string>
+    <string name="sec">sec</string>
+    <string name="min">min</string>
+    <string name="bw">BW</string>
+    <string name="no_sets_reps">---</string>
 
     <!-- EditWorkoutFragment -->
     <string name="delete_all_caps">DELETE</string>

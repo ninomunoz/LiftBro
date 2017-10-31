@@ -37,10 +37,6 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
     WorkoutAdapter mAdapter;
 
-    public WorkoutFragment() {
-        // Required empty public constructor
-    }
-
     public static WorkoutFragment newInstance() {
         return new WorkoutFragment();
     }

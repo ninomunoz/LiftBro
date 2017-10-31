@@ -44,10 +44,6 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
     private int mWorkoutId;
     private EditExerciseAdapter mAdapter;
 
-    public EditWorkoutFragment() {
-        // Required empty public constructor
-    }
-
     public static EditWorkoutFragment newInstance(int workoutId, String title) {
         EditWorkoutFragment frag = new EditWorkoutFragment();
         Bundle args = new Bundle();

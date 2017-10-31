@@ -42,10 +42,6 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
 
     private int mWorkoutId;
 
-    public AddExerciseFragment() {
-        // Required empty public constructor
-    }
-
     public static AddExerciseFragment newInstance(int workoutId) {
         AddExerciseFragment frag = new AddExerciseFragment();
         Bundle args = new Bundle();
@@ -109,7 +105,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
 
     private void updateToolbar() {
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Exercise");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.add_exercise));
     }
 
     private void loadMuscleGroups() {

@@ -10,8 +10,8 @@
 
     <!-- Spinner label -->
     <style name="InputLabel" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:paddingLeft">@dimen/input_label_horizontal_spacing</item>
-        <item name="android:paddingRight">@dimen/input_label_horizontal_spacing</item>
+        <item name="android:paddingStart">@dimen/input_label_horizontal_spacing</item>
+        <item name="android:paddingEnd">@dimen/input_label_horizontal_spacing</item>
     </style>
 
 </resources>

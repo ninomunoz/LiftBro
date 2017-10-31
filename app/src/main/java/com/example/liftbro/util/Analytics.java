@@ -25,6 +25,7 @@ public class Analytics {
     // Params
     private static final String WORKOUT_ID = "workout_id";
     private static final String WORKOUT_NAME = "workout_name";
+    private static final String EXERCISE_ID = "exercise_id";
 
     public static void logEventAddWorkout(Context context, long workoutId, String workoutName) {
         Bundle params = new Bundle();
@@ -71,6 +72,8 @@ public class Analytics {
     }
 
     public static void logEventAddExercise(Context context, long exerciseId) {
+        Bundle params = new Bundle();
+        params.putLong(EXERCISE_ID, exerciseId);
         FirebaseAnalytics.getInstance(context).logEvent(EVENT_ADD_EXERCISE, null);
     }
 }

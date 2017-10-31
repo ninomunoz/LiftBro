@@ -60,10 +60,6 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private long mTimeWhenStopped = 0;
     private boolean mIsStopwatchRunning;
 
-    public WorkoutDetailFragment() {
-        // Required empty public constructor
-    }
-
     public static WorkoutDetailFragment newInstance(int workoutId, String title) {
         WorkoutDetailFragment frag = new WorkoutDetailFragment();
         Bundle args = new Bundle();
@@ -212,10 +208,10 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 final int time = cursor.getInt(
                         cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_TIME));
 
-                String msgSetsReps = FormatUtil.formatSetsReps(sets, reps);
+                String msgSetsReps = FormatUtil.formatSetsReps(getContext(), sets, reps);
                 String msgWeightTime = time > 0 ?
-                        FormatUtil.formatTime(time) :
-                        FormatUtil.formatWeight(weight);
+                        FormatUtil.formatTime(getContext(), time) :
+                        FormatUtil.formatWeight(getContext(), weight);
 
                 shareMsg += name + ": " + msgSetsReps + ", " + msgWeightTime + "\n";
             }

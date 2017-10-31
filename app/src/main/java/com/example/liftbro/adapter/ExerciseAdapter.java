@@ -78,17 +78,17 @@ public class ExerciseAdapter extends
         tvExerciseName.setText(name);
         tvExerciseName.setContentDescription(name);
 
-        tvExerciseSet.setText(FormatUtil.formatSetsReps(sets, reps));
-        tvExerciseSet.setContentDescription(FormatUtil.formatSetsRepsContentDescription(sets, reps));
+        tvExerciseSet.setText(FormatUtil.formatSetsReps(mContext, sets, reps));
+        tvExerciseSet.setContentDescription(FormatUtil.formatSetsRepsContentDescription(mContext, sets, reps));
 
 
         if (time > 0) {
-            String timeText = FormatUtil.formatTime(time);
+            String timeText = FormatUtil.formatTime(mContext, time);
             tvExerciseWeight.setText(timeText);
             tvExerciseWeight.setContentDescription(timeText);
         }
         else {
-            String weightText = FormatUtil.formatWeight(weight);
+            String weightText = FormatUtil.formatWeight(mContext, weight);
             tvExerciseWeight.setText(weightText);
             tvExerciseWeight.setContentDescription(weightText);
         }
