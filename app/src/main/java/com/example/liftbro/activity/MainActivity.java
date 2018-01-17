@@ -24,14 +24,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String INTENT_EXTRA_WORKOUT_NAME = "INTENT_EXTRA_WORKOUT_NAME";
     private static final int REQUEST_INVITE = 1;
 
-    private boolean mIsDualPane;
+    public static boolean mIsDualPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mIsDualPane = findViewById(R.id.fragment_workout) != null;

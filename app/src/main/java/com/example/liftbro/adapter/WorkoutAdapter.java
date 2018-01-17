@@ -55,7 +55,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
                 WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutId, workoutName);
                 FragmentTransaction transaction = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
-                transaction.addToBackStack(null);
+
+                // Up navigation not necessary if dual pane
+                if (!((MainActivity)mContext).mIsDualPane) {
+                    transaction.addToBackStack(null);
+                }
+
                 transaction.commit();
 
                 Analytics.logEventViewWorkout(mContext, workoutId, workoutName);
