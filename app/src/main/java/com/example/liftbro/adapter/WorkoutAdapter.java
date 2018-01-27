@@ -56,8 +56,9 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
                 FragmentTransaction transaction = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
 
-                // Up navigation not necessary if dual pane
-                if (!((MainActivity)mContext).mIsDualPane) {
+                // Up navigation not necessary if two pane
+                boolean isTwoPane = mContext.getResources().getBoolean(R.bool.is_two_pane);
+                if (!isTwoPane) {
                     transaction.addToBackStack(null);
                 }
 

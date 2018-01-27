@@ -1,13 +1,10 @@
 package com.example.liftbro.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -24,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String INTENT_EXTRA_WORKOUT_NAME = "INTENT_EXTRA_WORKOUT_NAME";
     private static final int REQUEST_INVITE = 1;
 
-    public static boolean mIsDualPane;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mIsDualPane = findViewById(R.id.fragment_workout) != null;
+        boolean isTwoPane = getResources().getBoolean(R.bool.is_two_pane);
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -44,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Add workout fragment
-            if (mIsDualPane) {
+            if (isTwoPane) {
                 WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_workout, workoutFragment).commit();
