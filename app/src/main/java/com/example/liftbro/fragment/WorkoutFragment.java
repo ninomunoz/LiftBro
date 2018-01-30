@@ -115,13 +115,13 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
             WorkoutDetailFragment detailFrag = WorkoutDetailFragment.newInstance(workoutId, workoutName);
             FragmentTransaction detailTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            detailTransaction.replace(R.id.fragment_container, detailFrag);
+            detailTransaction.replace(R.id.main_fragment_container, detailFrag);
             detailTransaction.addToBackStack(null);
             detailTransaction.commit();
 
             EditWorkoutFragment editFrag = EditWorkoutFragment.newInstance(workoutId, workoutName);
             FragmentTransaction editTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            editTransaction.replace(R.id.fragment_container, editFrag);
+            editTransaction.replace(R.id.main_fragment_container, editFrag);
             editTransaction.addToBackStack(null);
             editTransaction.commit();
         }

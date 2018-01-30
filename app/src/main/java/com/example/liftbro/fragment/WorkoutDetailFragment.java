@@ -158,7 +158,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
     private void editWorkout() {
         EditWorkoutFragment frag = EditWorkoutFragment.newInstance(mWorkoutId, mWorkoutName);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, frag);
+        transaction.replace(R.id.main_fragment_container, frag);
         transaction.addToBackStack(null);
         transaction.commit();
     }

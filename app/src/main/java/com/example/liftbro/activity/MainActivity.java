@@ -33,29 +33,30 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            long workoutId = 0;
+            boolean launchedFromWidget = false;
+
             if (extras != null) {
-                workoutId = extras.getLong(INTENT_EXTRA_WORKOUT_ID);
+                long workoutId = extras.getLong(INTENT_EXTRA_WORKOUT_ID);
+                if (workoutId != 0) {
+                    launchedFromWidget = true;
+                    String workoutName = extras.getString(INTENT_EXTRA_WORKOUT_NAME);
+                    loadWorkoutFromWidget((int)workoutId, workoutName, isTwoPane);
+                }
             }
 
-            // Add workout fragment
-            if (isTwoPane) {
-                WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_workout, workoutFragment).commit();
-            }
-            else {
-                WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_container, workoutFragment).commit();
-            }
-
-            if (extras != null && workoutId != 0) {
-                // Launched from widget - show workout details
-                String name = extras.getString(INTENT_EXTRA_WORKOUT_NAME);
-                WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance((int)workoutId, name);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, newFragment).commit();
+            if (!launchedFromWidget)
+            {
+                // Load list of workouts
+                if (isTwoPane) {
+                    WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.left_pane, workoutFragment).commit();
+                }
+                else {
+                    WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.main_fragment_container, workoutFragment).commit();
+                }
             }
         }
 
@@ -114,5 +115,18 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
         Analytics.logEventInvite(this);
+    }
+
+    private void loadWorkoutFromWidget(int workoutId, String workoutName, boolean isTwoPane)
+    {
+        if (isTwoPane) {
+            WorkoutFragment workoutFragment = WorkoutFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.left_pane, workoutFragment).commit();
+        }
+
+        WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutId, workoutName);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_fragment_container, newFragment).commit();
     }
 }

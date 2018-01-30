@@ -54,7 +54,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             public void onClick(View view) {
                 WorkoutDetailFragment newFragment = WorkoutDetailFragment.newInstance(workoutId, workoutName);
                 FragmentTransaction transaction = ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.replace(R.id.main_fragment_container, newFragment);
 
                 // Up navigation not necessary if two pane
                 boolean isTwoPane = mContext.getResources().getBoolean(R.bool.is_two_pane);
