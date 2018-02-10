@@ -39,6 +39,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
 
     @BindView(R.id.rv_exercises) RecyclerView rvExercises;
     @BindView(R.id.fab_add_exercise) FloatingActionButton mFab;
+    @BindView(R.id.tv_add_exercise) TextView tvAddExercise;
 
     private String mTitle;
     private int mWorkoutId;
@@ -121,6 +122,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.setCursor(data);
+        tvAddExercise.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override

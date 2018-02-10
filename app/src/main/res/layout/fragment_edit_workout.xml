@@ -23,4 +23,13 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp" />
 
+    <TextView
+        android:id="@+id/tv_add_exercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/tap_to_add_an_exercise"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 </android.support.design.widget.CoordinatorLayout>
