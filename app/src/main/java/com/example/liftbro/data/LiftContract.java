@@ -35,6 +35,7 @@ public class LiftContract {
 
         public static final String TABLE_NAME = "workout";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_POSITION = "position";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(WorkoutEntry.TABLE_NAME).build();

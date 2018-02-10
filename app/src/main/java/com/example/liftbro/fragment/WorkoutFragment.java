@@ -14,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,13 @@ import android.widget.Toast;
 
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.WorkoutAdapter;
-import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.AddWorkoutDialogFragment;
+import com.example.liftbro.helper.WorkoutMoveHelper;
+import com.example.liftbro.model.Workout;
 import com.example.liftbro.util.Analytics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +67,9 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         mAdapter.setHasStableIds(true);
         mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(0, null, this);
+        WorkoutMoveHelper callback = new WorkoutMoveHelper(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
 
         // Hook up FAB
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +84,21 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         return view;
     }
 
+    @Override
+    public void onPause() {
+        // Save positions to database
+        List<Workout> workouts = mAdapter.getWorkouts();
+        for (int i = 0; i < workouts.size(); i++) {
+            ContentValues values = new ContentValues();
+            values.put(WorkoutEntry.COLUMN_POSITION, i);
+            getActivity().getContentResolver().update(
+                    ContentUris.withAppendedId(WorkoutEntry.CONTENT_URI, workouts.get(i).getId()),
+                    values, null, null
+            );
+        }
+        super.onPause();
+    }
+
     private void updateToolbar() {
         ((AppCompatActivity)getActivity()).getSupportActionBar()
                 .setTitle(getString(R.string.app_name));
@@ -87,24 +110,35 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         return new CursorLoader(getActivity(),
                 WorkoutEntry.CONTENT_URI,
                 null, null, null,
-                WorkoutEntry.COLUMN_NAME);
+                WorkoutEntry.COLUMN_POSITION); // sort order
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.setCursor(data);
+        List<Workout> workouts = new ArrayList<>();
+        if (data.moveToFirst()) {
+            do {
+                final int workoutId = data.getInt(data.getColumnIndex(WorkoutEntry._ID));
+                final String workoutName = data.getString(data.getColumnIndex(WorkoutEntry.COLUMN_NAME));
+                final int workoutPos = data.getInt(data.getColumnIndex(WorkoutEntry.COLUMN_POSITION));
+                workouts.add(new Workout(workoutId, workoutName, workoutPos));
+            } while (data.moveToNext());
+        }
+
+        mAdapter.setWorkouts(workouts);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.setCursor(null);
+        mAdapter.setWorkouts(null);
     }
 
     // AddWorkoutDialogFragment.AddWorkoutListener implementation
     @Override
     public void onAdd(String workoutName) {
         ContentValues values = new ContentValues();
-        values.put(LiftContract.WorkoutEntry.COLUMN_NAME, workoutName);
+        values.put(WorkoutEntry.COLUMN_NAME, workoutName);
+        values.put(WorkoutEntry.COLUMN_POSITION, mAdapter.getItemCount());
 
         try {
             Uri uri = getActivity().getContentResolver().insert(WorkoutEntry.CONTENT_URI, values);
