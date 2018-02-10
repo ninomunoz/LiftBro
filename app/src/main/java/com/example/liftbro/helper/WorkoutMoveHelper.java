@@ -38,6 +38,22 @@ public class WorkoutMoveHelper extends ItemTouchHelper.Callback {
     }
 
     @Override
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        // We only want the active item
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            viewHolder.itemView.setTranslationZ(50);
+        }
+
+        super.onSelectedChanged(viewHolder, actionState);
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        viewHolder.itemView.setTranslationZ(0);
+    }
+
+    @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) { }
 
     public interface WorkoutMoveListener {
