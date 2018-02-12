@@ -27,12 +27,17 @@ import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.EditExerciseDialogFragment;
 import com.example.liftbro.R;
 import com.example.liftbro.adapter.EditExerciseAdapter;
-import com.example.liftbro.helper.ExerciseSwipeHelper;
+import com.example.liftbro.helper.ExerciseTouchHelper;
+import com.example.liftbro.model.Exercise;
+import com.example.liftbro.model.WorkoutExercise;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener, ExerciseSwipeHelper.ExerciseSwipeListener {
+public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener, ExerciseTouchHelper.ExerciseTouchListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -80,7 +85,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         getLoaderManager().initLoader(2, null, this);
 
         // Add swipe helper
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ExerciseSwipeHelper(0, ItemTouchHelper.LEFT, this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ExerciseTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvExercises);
 
         // Hook up FAB
@@ -121,13 +126,55 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.setCursor(data);
+        List<WorkoutExercise> workoutExercises = new ArrayList<>();
+        if (data.moveToFirst()) {
+            do {
+                final int workoutExerciseId = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry._ID));
+                final int exerciseId = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
+                final int time = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_TIME));
+                int sets = 0, reps = 0;
+                double weight = 0.0;
+                Exercise exercise;
+
+                if (time == 0) {
+                    sets = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_SETS));
+                    reps = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_REPS));
+                    weight = data.getDouble(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_WEIGHT));
+                }
+
+                // Retrieve Exercise from database
+                String[] projection = { LiftContract.ExerciseEntry.COLUMN_NAME };
+                String selection = LiftContract.ExerciseEntry._ID + " = ?";
+                String[] selectionArgs = { Integer.toString(exerciseId) };
+                Cursor exerciseCursor = getContext().getContentResolver().query(
+                        LiftContract.ExerciseEntry.CONTENT_URI,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null
+                );
+
+                if (exerciseCursor.moveToFirst()) {
+                    String exerciseName = exerciseCursor.getString(exerciseCursor.getColumnIndex(LiftContract.ExerciseEntry.COLUMN_NAME));
+                    exercise = new Exercise(exerciseId, exerciseName, null);
+                    if (time == 0) {
+                        workoutExercises.add(new WorkoutExercise(workoutExerciseId, null, exercise, sets, reps, weight));
+                    }
+                    else {
+                        workoutExercises.add(new WorkoutExercise(workoutExerciseId, null, exercise, time));
+                    }
+                }
+
+            } while (data.moveToNext());
+        }
+
+        mAdapter.setWorkoutExercises(workoutExercises);
         tvAddExercise.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.setCursor(null);
+        mAdapter.setWorkoutExercises(null);
     }
 
     // View.OnClickListener implementation
@@ -137,17 +184,13 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         long id = mAdapter.getItemId(position);
         final String name = ((TextView)view.findViewById(R.id.tv_exercise_name)).getText().toString();
 
-        Cursor cursor = mAdapter.getCursor();
-        cursor.moveToPosition(position);
+        List<WorkoutExercise> workoutExercises = mAdapter.getWorkoutExercises();
+        WorkoutExercise workoutExercise = workoutExercises.get(position);
 
-        final int sets = cursor.getInt(
-                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_SETS));
-        final int reps = cursor.getInt(
-                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_REPS));
-        final double weight = cursor.getDouble(
-                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_WEIGHT));
-        final int time = cursor.getInt(
-                cursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_TIME));
+        final int sets = workoutExercise.getSets();
+        final int reps = workoutExercise.getReps();
+        final double weight = workoutExercise.getWeight();
+        final int time = workoutExercise.getTime();
 
         EditExerciseDialogFragment dlg = EditExerciseDialogFragment.newInstance(id, name, sets, reps, weight, time);
         dlg.setTargetFragment(EditWorkoutFragment.this, 0);
@@ -167,7 +210,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
                 values, null, null);
     }
 
-    // ExerciseSwipeHelper.ExerciseSwipeListener implementation
+    // ExerciseTouchHelper.ExerciseTouchListener implementation
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         long id = mAdapter.getItemId(position);

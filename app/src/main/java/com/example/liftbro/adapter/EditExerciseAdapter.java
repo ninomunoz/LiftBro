@@ -1,7 +1,6 @@
 package com.example.liftbro.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.R;
+import com.example.liftbro.model.Exercise;
+import com.example.liftbro.model.WorkoutExercise;
 import com.example.liftbro.util.FormatUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,8 +25,8 @@ import butterknife.ButterKnife;
 public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapter.ViewHolder> {
 
     private Context mContext;
-    private Cursor mCursor;
     private View.OnClickListener mOnClickListener;
+    List<WorkoutExercise> mWorkoutExercises;
 
     public EditExerciseAdapter(Context context) {
         mContext = context;
@@ -40,34 +42,13 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
     @Override
     public void onBindViewHolder(EditExerciseAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
-        mCursor.moveToPosition(position);
-
-        final int exerciseId = mCursor.getInt(
-                mCursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
-
-        String[] projection = { LiftContract.ExerciseEntry.COLUMN_NAME };
-        String selection = LiftContract.ExerciseEntry._ID + " = ?";
-        String[] selectionArgs = { Integer.toString(exerciseId) };
-
-        Cursor exerciseCursor = mContext.getContentResolver().query(
-                LiftContract.ExerciseEntry.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                null
-        );
-        exerciseCursor.moveToFirst();
-
-        final String name = exerciseCursor.getString(
-                exerciseCursor.getColumnIndex(LiftContract.ExerciseEntry.COLUMN_NAME));
-        final int sets = mCursor.getInt(
-                mCursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_SETS));
-        final int reps = mCursor.getInt(
-                mCursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_REPS));
-        final double weight = mCursor.getDouble(
-                mCursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_WEIGHT));
-        final int time = mCursor.getInt(
-                mCursor.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_TIME));
+        final WorkoutExercise workoutExercise = mWorkoutExercises.get(position);
+        final Exercise exercise = workoutExercise.getExercise();
+        final String name = exercise.getName();
+        final int sets = workoutExercise.getSets();
+        final int reps = workoutExercise.getReps();
+        final double weight = workoutExercise.getWeight();
+        final int time = workoutExercise.getTime();
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
@@ -94,27 +75,24 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
 
     @Override
     public int getItemCount() {
-        return mCursor != null ? mCursor.getCount() : 0;
+        return mWorkoutExercises != null ? mWorkoutExercises.size() : 0;
     }
 
     @Override
     public long getItemId(int position) {
-        if (mCursor != null) {
-            if (mCursor.moveToPosition(position)) {
-                return mCursor.getLong(mCursor.getColumnIndex(LiftContract.WorkoutExerciseEntry._ID));
-            }
-            return 0;
+        if (mWorkoutExercises != null) {
+            return mWorkoutExercises.get(position).getId();
         }
         return 0;
     }
 
-    public Cursor getCursor() {
-        return mCursor;
+    public void setWorkoutExercises(List<WorkoutExercise> data) {
+        mWorkoutExercises = data;
+        notifyDataSetChanged();
     }
 
-    public void setCursor(Cursor cursor) {
-        mCursor = cursor;
-        notifyDataSetChanged();
+    public List<WorkoutExercise> getWorkoutExercises() {
+        return mWorkoutExercises;
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

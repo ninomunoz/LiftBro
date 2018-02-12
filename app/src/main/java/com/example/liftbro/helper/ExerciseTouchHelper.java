@@ -11,11 +11,11 @@ import com.example.liftbro.adapter.EditExerciseAdapter;
  * Created by i57198 on 10/23/17.
  */
 
-public class ExerciseSwipeHelper extends ItemTouchHelper.SimpleCallback {
+public class ExerciseTouchHelper extends ItemTouchHelper.SimpleCallback {
 
-    private ExerciseSwipeListener mListener;
+    private ExerciseTouchListener mListener;
 
-    public ExerciseSwipeHelper(int dragDirs, int swipeDirs, ExerciseSwipeListener listener) {
+    public ExerciseTouchHelper(int dragDirs, int swipeDirs, ExerciseTouchListener listener) {
         super(dragDirs, swipeDirs);
         mListener = listener;
     }
@@ -56,7 +56,7 @@ public class ExerciseSwipeHelper extends ItemTouchHelper.SimpleCallback {
         mListener.onSwiped(viewHolder, direction, viewHolder.getAdapterPosition());
     }
 
-    public interface ExerciseSwipeListener {
+    public interface ExerciseTouchListener {
         void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position);
     }
 }
