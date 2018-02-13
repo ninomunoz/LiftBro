@@ -78,6 +78,7 @@ public class LiftContract {
         public static final String COLUMN_REPS = "reps";
         public static final String COLUMN_WEIGHT = "weight";
         public static final String COLUMN_TIME = "time";
+        public static final String COLUMN_POSITION = "position";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(WorkoutExerciseEntry.TABLE_NAME).build();

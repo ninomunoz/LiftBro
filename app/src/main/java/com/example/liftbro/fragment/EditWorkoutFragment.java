@@ -37,7 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, EditExerciseDialogFragment.EditExerciseListener, ExerciseTouchHelper.ExerciseTouchListener {
+public class EditWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener,
+        EditExerciseDialogFragment.EditExerciseListener, ExerciseTouchHelper.OnStartDragListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
@@ -49,6 +50,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
     private String mTitle;
     private int mWorkoutId;
     private EditExerciseAdapter mAdapter;
+    private ItemTouchHelper mItemTouchHelper;
 
     public static EditWorkoutFragment newInstance(int workoutId, String title) {
         EditWorkoutFragment frag = new EditWorkoutFragment();
@@ -78,15 +80,16 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager glm = new LinearLayoutManager(getActivity());
         rvExercises.setLayoutManager(glm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
-        mAdapter = new EditExerciseAdapter(getContext());
+        mAdapter = new EditExerciseAdapter(getContext(), this);
         mAdapter.setHasStableIds(true);
         mAdapter.setOnClickListener(this);
         rvExercises.setAdapter(mAdapter);
         getLoaderManager().initLoader(2, null, this);
 
-        // Add swipe helper
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ExerciseTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rvExercises);
+        // Add touch helper
+        ExerciseTouchHelper callback = new ExerciseTouchHelper(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(rvExercises);
 
         // Hook up FAB
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +112,22 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public void onPause() {
+        // Save positions to database
+        List<WorkoutExercise> exercises = mAdapter.getWorkoutExercises();
+        for (int i = 0; i < exercises.size(); i++) {
+            ContentValues values = new ContentValues();
+            values.put(LiftContract.WorkoutExerciseEntry.COLUMN_POSITION, i);
+            getActivity().getContentResolver().update(
+                    ContentUris.withAppendedId(LiftContract.WorkoutExerciseEntry.CONTENT_URI, exercises.get(i).getId()),
+                    values, null, null
+            );
+        }
+
+        super.onPause();
+    }
+
     private void updateToolbar() {
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(mTitle);
@@ -121,7 +140,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         String[] selectionArgs = { Integer.toString(mWorkoutId) };
         return new CursorLoader(getActivity(),
                 LiftContract.WorkoutExerciseEntry.CONTENT_URI,
-                null, selection, selectionArgs, null);
+                null, selection, selectionArgs, LiftContract.WorkoutExerciseEntry.COLUMN_POSITION);
     }
 
     @Override
@@ -132,6 +151,7 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
                 final int workoutExerciseId = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry._ID));
                 final int exerciseId = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_EXERCISE_ID));
                 final int time = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_TIME));
+                final int position = data.getInt(data.getColumnIndex(LiftContract.WorkoutExerciseEntry.COLUMN_POSITION));
                 int sets = 0, reps = 0;
                 double weight = 0.0;
                 Exercise exercise;
@@ -158,10 +178,10 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
                     String exerciseName = exerciseCursor.getString(exerciseCursor.getColumnIndex(LiftContract.ExerciseEntry.COLUMN_NAME));
                     exercise = new Exercise(exerciseId, exerciseName, null);
                     if (time == 0) {
-                        workoutExercises.add(new WorkoutExercise(workoutExerciseId, null, exercise, sets, reps, weight));
+                        workoutExercises.add(new WorkoutExercise(workoutExerciseId, null, exercise, sets, reps, weight, position));
                     }
                     else {
-                        workoutExercises.add(new WorkoutExercise(workoutExerciseId, null, exercise, time));
+                        workoutExercises.add(new WorkoutExercise(workoutExerciseId, null, exercise, time, position));
                     }
                 }
 
@@ -210,12 +230,8 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
                 values, null, null);
     }
 
-    // ExerciseTouchHelper.ExerciseTouchListener implementation
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        long id = mAdapter.getItemId(position);
-        getActivity().getContentResolver().delete(
-                ContentUris.withAppendedId(LiftContract.WorkoutExerciseEntry.CONTENT_URI, id),
-                null, null);
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

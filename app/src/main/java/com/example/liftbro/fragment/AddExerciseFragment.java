@@ -19,6 +19,7 @@ import android.widget.Spinner;
 
 import com.example.liftbro.R;
 import com.example.liftbro.async.FilterExercisesTask;
+import com.example.liftbro.data.LiftContract;
 import com.example.liftbro.dialog.AddExerciseDialogFragment;
 import com.example.liftbro.util.Analytics;
 
@@ -167,6 +168,18 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
         Cursor cursor = (Cursor)mSpinnerExercise.getSelectedItem();
         long exerciseId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry._ID));
 
+        // Get workout's exercise count
+        String[] projection = { WorkoutExerciseEntry._ID };
+        String selection = WorkoutExerciseEntry.COLUMN_WORKOUT_ID + " = ?";
+        String[] selectionArgs = { Integer.toString(mWorkoutId) };
+        int exerciseCount = getActivity().getContentResolver().query(
+            WorkoutExerciseEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        ).getCount();
+
         ContentValues values = new ContentValues();
         values.put(WorkoutExerciseEntry.COLUMN_WORKOUT_ID, mWorkoutId);
         values.put(WorkoutExerciseEntry.COLUMN_EXERCISE_ID, exerciseId);
@@ -174,6 +187,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
         values.put(WorkoutExerciseEntry.COLUMN_REPS, reps);
         values.put(WorkoutExerciseEntry.COLUMN_WEIGHT, weight);
         values.put(WorkoutExerciseEntry.COLUMN_TIME, 0);
+        values.put(WorkoutExerciseEntry.COLUMN_POSITION, exerciseCount);
 
         getActivity().getContentResolver().insert(WorkoutExerciseEntry.CONTENT_URI, values);
         Analytics.logEventAddExercise(getActivity(), exerciseId);
@@ -185,6 +199,18 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
         Cursor cursor = (Cursor)mSpinnerExercise.getSelectedItem();
         long exerciseId = cursor.getLong(cursor.getColumnIndex(ExerciseEntry._ID));
 
+        // Get workout's exercise count
+        String[] projection = { WorkoutExerciseEntry._ID };
+        String selection = WorkoutExerciseEntry.COLUMN_WORKOUT_ID + " = ?";
+        String[] selectionArgs = { Integer.toString(mWorkoutId) };
+        int exerciseCount = getActivity().getContentResolver().query(
+                WorkoutExerciseEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        ).getCount();
+
         ContentValues values = new ContentValues();
         values.put(WorkoutExerciseEntry.COLUMN_WORKOUT_ID, mWorkoutId);
         values.put(WorkoutExerciseEntry.COLUMN_EXERCISE_ID, exerciseId);
@@ -192,6 +218,7 @@ public class AddExerciseFragment extends Fragment implements AddExerciseDialogFr
         values.put(WorkoutExerciseEntry.COLUMN_REPS, 0);
         values.put(WorkoutExerciseEntry.COLUMN_WEIGHT, 0);
         values.put(WorkoutExerciseEntry.COLUMN_TIME, time);
+        values.put(WorkoutExerciseEntry.COLUMN_POSITION, exerciseCount);
 
         getActivity().getContentResolver().insert(WorkoutExerciseEntry.CONTENT_URI, values);
         Analytics.logEventAddExercise(getActivity(), exerciseId);

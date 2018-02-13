@@ -1,18 +1,25 @@
 package com.example.liftbro.adapter;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.liftbro.R;
+import com.example.liftbro.data.LiftContract;
+import com.example.liftbro.helper.ExerciseTouchHelper;
 import com.example.liftbro.model.Exercise;
 import com.example.liftbro.model.WorkoutExercise;
 import com.example.liftbro.util.FormatUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,14 +29,17 @@ import butterknife.ButterKnife;
  * Created by i57198 on 9/28/17.
  */
 
-public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapter.ViewHolder> {
+public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapter.ViewHolder>
+        implements ExerciseTouchHelper.ExerciseTouchListener {
 
     private Context mContext;
     private View.OnClickListener mOnClickListener;
     List<WorkoutExercise> mWorkoutExercises;
+    ExerciseTouchHelper.OnStartDragListener mDragStartListener;
 
-    public EditExerciseAdapter(Context context) {
+    public EditExerciseAdapter(Context context, ExerciseTouchHelper.OnStartDragListener listener) {
         mContext = context;
+        mDragStartListener = listener;
     }
 
     @Override
@@ -40,7 +50,7 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
     }
 
     @Override
-    public void onBindViewHolder(EditExerciseAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final EditExerciseAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
         final WorkoutExercise workoutExercise = mWorkoutExercises.get(position);
         final Exercise exercise = workoutExercise.getExercise();
@@ -71,6 +81,16 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
             tvExerciseWeight.setText(weightText);
             tvExerciseWeight.setContentDescription(weightText);
         }
+
+        holder.ivHandle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (MotionEventCompat.getActionMasked(motionEvent) == MotionEvent.ACTION_DOWN) {
+                    mDragStartListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -99,6 +119,28 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
         mOnClickListener = listener;
     }
 
+    @Override
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        long id = mWorkoutExercises.get(position).getId();
+        mContext.getContentResolver().delete(
+                ContentUris.withAppendedId(LiftContract.WorkoutExerciseEntry.CONTENT_URI, id),
+                null, null);
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mWorkoutExercises, i, i+1);
+            }
+        }
+        else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mWorkoutExercises, i, i-1);
+            }
+        }
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
@@ -106,6 +148,7 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
         @BindView(R.id.tv_exercise_weight) public TextView tvExerciseWeight;
         @BindView(R.id.view_background) public RelativeLayout viewBackground;
         @BindView(R.id.view_foreground) public RelativeLayout viewForeground;
+        @BindView(R.id.handle) public ImageView ivHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);

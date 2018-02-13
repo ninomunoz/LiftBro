@@ -256,7 +256,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         String[] selectionArgs = { Integer.toString(mWorkoutId) };
         return new CursorLoader(getActivity(),
                 WorkoutExerciseEntry.CONTENT_URI,
-                null, selection, selectionArgs, null);
+                null, selection, selectionArgs, WorkoutExerciseEntry.COLUMN_POSITION);
     }
 
     @Override
