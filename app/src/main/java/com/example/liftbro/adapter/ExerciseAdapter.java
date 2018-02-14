@@ -73,22 +73,27 @@ public class ExerciseAdapter extends
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
         TextView tvExerciseSet = holder.tvExerciseSet;
+        TextView tvExerciseReps = holder.tvExerciseReps;
         TextView tvExerciseWeight = holder.tvExerciseWeight;
 
         tvExerciseName.setText(name);
         tvExerciseName.setContentDescription(name);
 
-        tvExerciseSet.setText(FormatUtil.formatSetsReps(mContext, sets, reps));
-        tvExerciseSet.setContentDescription(FormatUtil.formatSetsRepsContentDescription(mContext, sets, reps));
-
-
         if (time > 0) {
-            String timeText = FormatUtil.formatTime(mContext, time);
+            tvExerciseSet.setVisibility(View.GONE);
+            tvExerciseReps.setVisibility(View.GONE);
+
+            String timeText = FormatUtil.formatTime(mContext, time, true);
             tvExerciseWeight.setText(timeText);
             tvExerciseWeight.setContentDescription(timeText);
         }
         else {
-            String weightText = FormatUtil.formatWeight(mContext, weight);
+            tvExerciseSet.setText(FormatUtil.formatSets(sets));
+            tvExerciseSet.setContentDescription(FormatUtil.formatSetsContentDescription(mContext, sets));
+            tvExerciseReps.setText(FormatUtil.formatReps(reps));
+            tvExerciseReps.setContentDescription(FormatUtil.formatRepsContentDescription(mContext, reps));
+
+            String weightText = FormatUtil.formatWeight(mContext, weight, true);
             tvExerciseWeight.setText(weightText);
             tvExerciseWeight.setContentDescription(weightText);
         }
@@ -123,6 +128,7 @@ public class ExerciseAdapter extends
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
         @BindView(R.id.tv_exercise_set) public TextView tvExerciseSet;
+        @BindView(R.id.tv_exercise_reps) public TextView tvExerciseReps;
         @BindView(R.id.tv_exercise_weight) public TextView tvExerciseWeight;
 
         public ExerciseViewHolder(View itemView) {
