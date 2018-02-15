@@ -11,55 +11,72 @@ import com.example.liftbro.R;
 public class FormatUtil {
 
     private static final String SPACE = " ";
+    private static final String SETS_PREFIX = "S: ";
+    private static final String REPS_PREFIX = "R: ";
+    private static final String WEIGHT_PREFIX = "W: ";
+    private static final String TIME_PREFIX = "T: ";
 
-    public static String formatTime (Context context, int timeInSeconds) {
+    public static String formatTime (Context context, int timeInSeconds, boolean withPrefix) {
         if (timeInSeconds >= 0 && timeInSeconds < 60) {
-            return timeInSeconds + SPACE + context.getString(R.string.sec);
+            return withPrefix ?
+                    TIME_PREFIX + timeInSeconds + SPACE + context.getString(R.string.sec) :
+                    timeInSeconds + SPACE + context.getString(R.string.sec);
         }
         else {
             int minutes = timeInSeconds / 60;
             int seconds = timeInSeconds % 60;
 
             if (seconds == 0) {
-                return Integer.toString(minutes) + SPACE + context.getString(R.string.min);
+                return withPrefix ?
+                        TIME_PREFIX + Integer.toString(minutes) + SPACE + context.getString(R.string.min) :
+                        Integer.toString(minutes) + SPACE + context.getString(R.string.min);
             }
             else {
-                return Integer.toString(minutes) + SPACE + context.getString(R.string.min) +
-                        SPACE + seconds + SPACE + context.getString(R.string.sec);
+                return withPrefix ?
+                        TIME_PREFIX + Integer.toString(minutes) + SPACE + context.getString(R.string.min) +
+                                SPACE + seconds + SPACE + context.getString(R.string.sec) :
+                        Integer.toString(minutes) + SPACE + context.getString(R.string.min) +
+                                SPACE + seconds + SPACE + context.getString(R.string.sec);
             }
         }
     }
 
-    public static String formatWeight(Context context, double weight) {
-        return weight == 0.0 ?
-                context.getString(R.string.bw) :
-                weight + SPACE + context.getString(R.string.lbs);
-    }
-
-    public static String formatSetsReps(Context context, int sets, int reps) {
-        String formattedSetsReps;
-        if (sets > 0) {
-            formattedSetsReps = sets + SPACE + context.getString(R.string.sets);
-            if (reps > 0) {
-                formattedSetsReps = sets + " x " + reps;
-            }
+    public static String formatWeight(Context context, double weight, boolean withPrefix) {
+        if (weight == 0.0) {
+            return withPrefix ?
+                    WEIGHT_PREFIX + context.getString(R.string.bw) :
+                    context.getString(R.string.bw);
         }
         else {
-            formattedSetsReps = context.getString(R.string.no_sets_reps);
+            return withPrefix ?
+                    WEIGHT_PREFIX + weight : // + SPACE + context.getString(R.string.lbs) :
+                    String.valueOf(weight); // + SPACE + context.getString(R.string.lbs);
         }
-
-        return formattedSetsReps;
     }
 
-    public static String formatSetsRepsContentDescription(Context context, int sets, int reps) {
-        String contentDescription = "";
-        if (sets > 0) {
-            contentDescription = sets + SPACE + context.getString(R.string.sets) + SPACE;
-            if (reps > 0) {
-                contentDescription += + reps + SPACE + context.getString(R.string.reps);
-            }
-        }
+    public static String formatSets(int sets) {
+        return SETS_PREFIX + sets;
+    }
 
-        return contentDescription;
+    public static String formatReps(int reps) {
+        return REPS_PREFIX + reps;
+    }
+
+    public static String formatSetsContentDescription(Context context, int sets) {
+        return sets + SPACE + context.getString(R.string.sets);
+    }
+
+    public static String formatRepsContentDescription(Context context, int reps) {
+        return reps + SPACE + context.getString(R.string.reps);
+    }
+
+    public static String formatSharedExercise(Context context, String name, int sets, int reps, double weight, int time) {
+        return time > 0 ?
+                name + ": " + formatTime(context, time, false) :
+                name + ": " + sets + "x" + reps + ", " + formatSharedWeight(context, weight);
+    }
+
+    private static String formatSharedWeight(Context context, double weight) {
+        return weight + SPACE + context.getString(R.string.lbs);
     }
 }

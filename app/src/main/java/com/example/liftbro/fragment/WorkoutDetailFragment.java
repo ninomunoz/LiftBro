@@ -208,12 +208,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 final int time = cursor.getInt(
                         cursor.getColumnIndex(WorkoutExerciseEntry.COLUMN_TIME));
 
-                String msgSetsReps = FormatUtil.formatSetsReps(getContext(), sets, reps);
-                String msgWeightTime = time > 0 ?
-                        FormatUtil.formatTime(getContext(), time) :
-                        FormatUtil.formatWeight(getContext(), weight);
-
-                shareMsg += name + ": " + msgSetsReps + ", " + msgWeightTime + "\n";
+                shareMsg += FormatUtil.formatSharedExercise(getContext(), name, sets, reps, weight, time) + "\n";
             }
             while (cursor.moveToNext());
         }
