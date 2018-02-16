@@ -14,14 +14,14 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
         android:tint="@android:color/white"
-        android:contentDescription="@string/add_workout"
-        app:layout_anchor="@+id/rv_workouts"
-        app:layout_anchorGravity="bottom|end" />
+        android:contentDescription="@string/add_workout" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@id/rv_workouts"
+        android:id="@+id/rv_workouts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false" />
 
 </android.support.design.widget.CoordinatorLayout>

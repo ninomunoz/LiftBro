@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.liftbro.activity.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_start_workout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_dumbbell"
+        android:contentDescription="Start Workout"
+        android:tint="@android:color/white" />
+
     <android.support.v7.widget.RecyclerView
-        android:id="@id/rv_exercises"
+        android:id="@+id/rv_exercises"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@android:color/black"
-        android:padding="16dp"
-        android:layout_alignParentBottom="true">
-        <TextView
-            android:id="@+id/tv_start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="@android:color/holo_green_light"
-            android:contentDescription="@string/start"
-            android:text="@string/start" />
-        <Chronometer
-            android:id="@+id/chronometer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:format="%s"
-            android:textSize="20sp"
-            android:textColor="@android:color/white" />
-        <TextView
-            android:id="@+id/tv_stop"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="@android:color/holo_red_light"
-            android:text="@string/reset" />
-    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="@android:color/black"-->
+        <!--android:padding="16dp"-->
+        <!--android:layout_alignParentBottom="true">-->
+        <!--<TextView-->
+            <!--android:id="@+id/tv_start"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textColor="@android:color/holo_green_light"-->
+            <!--android:contentDescription="@string/start"-->
+            <!--android:text="@string/start" />-->
+        <!--<Chronometer-->
+            <!--android:id="@+id/chronometer"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:format="%s"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textColor="@android:color/white" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/tv_stop"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textColor="@android:color/holo_red_light"-->
+            <!--android:text="@string/reset" />-->
+    <!--</LinearLayout>-->
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -40,25 +41,17 @@ import static com.example.liftbro.data.LiftContract.ExerciseEntry;
 import static com.example.liftbro.data.LiftContract.WorkoutEntry;
 
 public class WorkoutDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener, View.OnClickListener {
+        RenameWorkoutDialogFragment.RenameWorkoutListener, DeleteWorkoutDialogFragment.DeleteWorkoutListener {
 
     private static final String ARG_TITLE_KEY = "title";
     private static final String ARG_WORKOUT_ID_KEY = "workoutId";
-    private static final String ARG_STOPWATCH_TIME = "stopwatchTime";
-    private static final String ARG_IS_STOPWATCH_RUNNING = "isStopwatchRunning";
-    private static final String ARG_TIME_WHEN_STOPPED = "timeWhenStopped";
 
     @BindView(R.id.rv_exercises) RecyclerView rvExercises;
-    @BindView(R.id.chronometer) Chronometer mChronometer;
-    @BindView(R.id.tv_start) TextView tvStart;
-    @BindView(R.id.tv_stop) TextView tvStop;
+    @BindView(R.id.fab_start_workout) FloatingActionButton mFab;
 
     private String mWorkoutName;
     private int mWorkoutId;
     private ExerciseAdapter mAdapter;
-
-    private long mTimeWhenStopped = 0;
-    private boolean mIsStopwatchRunning;
 
     public static WorkoutDetailFragment newInstance(int workoutId, String title) {
         WorkoutDetailFragment frag = new WorkoutDetailFragment();
@@ -93,21 +86,18 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         rvExercises.setAdapter(mAdapter);
         getLoaderManager().initLoader(1, null, this);
 
-        tvStart.setOnClickListener(this);
-        tvStart.setTextColor(Color.GREEN);
-        tvStop.setTextColor(Color.RED);
-
-        if (savedInstanceState != null) {
-            mTimeWhenStopped = savedInstanceState.getLong(ARG_TIME_WHEN_STOPPED);
-            mIsStopwatchRunning = savedInstanceState.getBoolean(ARG_IS_STOPWATCH_RUNNING);
-
-            if (mIsStopwatchRunning) {
-                startStopwatch(savedInstanceState.getLong(ARG_STOPWATCH_TIME));
+        // Hook up FAB
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: Pass data to LiftFragment recyclerview
+                LiftFragment frag = LiftFragment.newInstance();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main_fragment_container, frag);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
-            else {
-                mChronometer.setBase(SystemClock.elapsedRealtime() + mTimeWhenStopped);
-            }
-        }
+        });
 
         return view;
     }
@@ -140,14 +130,6 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong(ARG_STOPWATCH_TIME, mChronometer.getBase());
-        outState.putBoolean(ARG_IS_STOPWATCH_RUNNING, mIsStopwatchRunning);
-        outState.putLong(ARG_TIME_WHEN_STOPPED, mTimeWhenStopped);
     }
 
     private void updateToolbar() {
@@ -220,30 +202,6 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         startActivity(sendIntent);
     }
 
-    private void startStopwatch(long base) {
-        mChronometer.setBase(base);
-        mChronometer.start();
-        mIsStopwatchRunning = true;
-        tvStart.setTextColor(Color.DKGRAY);
-        tvStart.setOnClickListener(null);
-        tvStop.setText(getString(R.string.stop));
-        tvStop.setOnClickListener(this);
-    }
-
-    private void stopStopwatch() {
-        tvStop.setText(getString(R.string.reset));
-        tvStart.setTextColor(Color.GREEN);
-        mTimeWhenStopped = mChronometer.getBase() - SystemClock.elapsedRealtime();
-        mChronometer.stop();
-        mIsStopwatchRunning = false;
-    }
-
-    private void resetStopwatch() {
-        mChronometer.setBase(SystemClock.elapsedRealtime());
-        mTimeWhenStopped = 0;
-        tvStop.setOnClickListener(null);
-    }
-
     // LoaderManager.LoaderCallbacks<Cursor> implementation
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
@@ -284,25 +242,5 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
                 ContentUris.withAppendedId(WorkoutEntry.CONTENT_URI, mWorkoutId),
                 null, null);
         getActivity().onBackPressed();
-    }
-
-    // View.OnClickListener implementation
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_start:
-                startStopwatch(SystemClock.elapsedRealtime() + mTimeWhenStopped);
-                Analytics.logEventStartTimer(getActivity());
-                break;
-            case R.id.tv_stop:
-                if (tvStop.getText().toString().equals(getString(R.string.stop))) { // stop
-                    stopStopwatch();
-                }
-                else { // reset
-                    resetStopwatch();
-                }
-                tvStart.setOnClickListener(this);
-                break;
-        }
     }
 }

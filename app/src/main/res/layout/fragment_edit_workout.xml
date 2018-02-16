@@ -13,15 +13,15 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
         android:contentDescription="@string/add_exercise"
-        android:tint="@android:color/white"
-        app:layout_anchor="@+id/rv_exercises"
-        app:layout_anchorGravity="bottom|end" />
+        android:tint="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@id/rv_exercises"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false" />
 
     <TextView
         android:id="@+id/tv_add_exercise"
