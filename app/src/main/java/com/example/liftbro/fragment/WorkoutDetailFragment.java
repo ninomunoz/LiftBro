@@ -78,8 +78,8 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         updateToolbar();
 
         // Set up recycler view
-        LinearLayoutManager glm = new LinearLayoutManager(getActivity());
-        rvExercises.setLayoutManager(glm);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        rvExercises.setLayoutManager(llm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
         mAdapter = new ExerciseAdapter(getContext());
         mAdapter.setHasStableIds(true);
@@ -90,8 +90,7 @@ public class WorkoutDetailFragment extends Fragment implements LoaderManager.Loa
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Pass data to LiftFragment recyclerview
-                LiftFragment frag = LiftFragment.newInstance();
+                LiftFragment frag = LiftFragment.newInstance(mWorkoutId, mWorkoutName);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.main_fragment_container, frag);
                 transaction.addToBackStack(null);

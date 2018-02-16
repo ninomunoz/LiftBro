@@ -10,9 +10,11 @@
         android:id="@+id/rv_exercises"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:layout_above="@+id/ll_stopwatch"/>
 
     <LinearLayout
+        android:id="@id/ll_stopwatch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

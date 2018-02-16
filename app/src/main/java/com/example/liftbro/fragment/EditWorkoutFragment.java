@@ -77,8 +77,8 @@ public class EditWorkoutFragment extends Fragment implements LoaderManager.Loade
         updateToolbar();
 
         // Set up recycler view
-        LinearLayoutManager glm = new LinearLayoutManager(getActivity());
-        rvExercises.setLayoutManager(glm);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        rvExercises.setLayoutManager(llm);
         rvExercises.addItemDecoration(new DividerItemDecoration(rvExercises.getContext(), DividerItemDecoration.VERTICAL));
         mAdapter = new EditExerciseAdapter(getContext(), this);
         mAdapter.setHasStableIds(true);
