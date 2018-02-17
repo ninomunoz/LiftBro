@@ -22,19 +22,19 @@
         android:layout_alignParentEnd="true">
 
         <TextView
-            android:id="@+id/tv_exercise_set"
+            android:id="@+id/tv_completed_exercise_set"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:textSize="14sp" />
         <TextView
-            android:id="@+id/tv_exercise_reps"
+            android:id="@+id/tv_completed_exercise_reps"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:textSize="14sp" />
         <TextView
-            android:id="@+id/tv_exercise_weight"
+            android:id="@+id/tv_completed_exercise_weight"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"

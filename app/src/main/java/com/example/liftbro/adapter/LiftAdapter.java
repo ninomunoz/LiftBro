@@ -48,59 +48,73 @@ public class LiftAdapter extends RecyclerView.Adapter<LiftAdapter.LiftViewHolder
         final WorkoutExercise workoutExercise = mTargetLifts.get(position);
         final Exercise exercise = workoutExercise.getExercise();
         final String name = exercise.getName();
-        boolean isTimedExercise = workoutExercise.getTime() > 0;
+        final int targetSets = workoutExercise.getSets();
+        final int targetReps = workoutExercise.getReps();
+        final double targetWeight = workoutExercise.getWeight();
+        final int targetTime = workoutExercise.getTime();
+        boolean isTimedExercise = targetTime > 0;
 
         List<CompletedSet> completedSets = mLiftSetMap.get(workoutExercise);
-        int sets = workoutExercise.getSets();
-        int time = 0;
-        List<Integer> reps = new ArrayList<>();
-        List<Double> weights = new ArrayList<>();
+        int completedTime = 0;
+        List<Integer> completedReps = new ArrayList<>();
+        List<Double> completedWeights = new ArrayList<>();
 
-        String strReps = "", strTime = "", strWeights = "";
+        String strCompletedReps = "", strCompletedTime = "", strCompletedWeights = "";
 
         if (completedSets != null) {
             for (CompletedSet set : completedSets) {
                 if (isTimedExercise) {
-                    time = set.getTime();
+                    completedTime = set.getTime();
                 }
                 else { // sets/reps workout
-                    reps.add(set.getReps());
-                    weights.add(set.getWeight());
+                    completedReps.add(set.getReps());
+                    completedWeights.add(set.getWeight());
                 }
             }
         }
         else { // no sets completed yet
             if (isTimedExercise) {
-                strTime = "T: -";
+                strCompletedTime = "T: -";
             }
             else {
-                strReps = "R: -";
-                strWeights = "W: -";
-                for (int i = 0; i < sets - 1; i++) {
-                    strReps += "/-";
-                    strWeights += "/-";
+                strCompletedReps = "R: -";
+                strCompletedWeights = "W: -";
+                for (int i = 0; i < targetSets - 1; i++) {
+                    strCompletedReps += "/-";
+                    strCompletedWeights += "/-";
                 }
             }
         }
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
-        TextView tvExerciseSet = holder.tvExerciseSet;
-        TextView tvExerciseReps = holder.tvExerciseReps;
-        TextView tvExerciseWeight = holder.tvExerciseWeight;
+        TextView tvTargetExerciseSet = holder.tvTargetExerciseSet;
+        TextView tvTargetExerciseReps = holder.tvTargetExerciseReps;
+        TextView tvTargetExerciseWeight = holder.tvTargetExerciseWeight;
+        TextView tvCompletedExerciseSet = holder.tvCompletedExerciseSet;
+        TextView tvCompletedExerciseReps = holder.tvCompletedExerciseReps;
+        TextView tvCompletedExerciseWeight = holder.tvCompletedExerciseWeight;
 
         tvExerciseName.setText(name);
         tvExerciseName.setContentDescription(name);
 
         if (isTimedExercise) {
-            tvExerciseSet.setVisibility(View.GONE);
-            tvExerciseReps.setVisibility(View.GONE);
-            tvExerciseWeight.setText(strTime);
+            tvTargetExerciseSet.setVisibility(View.GONE);
+            tvTargetExerciseReps.setVisibility(View.GONE);
+            tvTargetExerciseWeight.setText(FormatUtil.formatTime(mContext, targetTime, true));
+
+            tvCompletedExerciseSet.setVisibility(View.GONE);
+            tvCompletedExerciseReps.setVisibility(View.GONE);
+            tvCompletedExerciseWeight.setText(strCompletedTime);
         }
         else {
-            tvExerciseSet.setText(FormatUtil.formatSets(sets));
-            tvExerciseReps.setText(strReps);
-            tvExerciseWeight.setText(strWeights);
+            tvTargetExerciseSet.setText(FormatUtil.formatSets(targetSets));
+            tvTargetExerciseReps.setText(FormatUtil.formatReps(targetReps));
+            tvTargetExerciseWeight.setText(FormatUtil.formatWeight(mContext, targetWeight, true));
+
+            tvCompletedExerciseSet.setText(FormatUtil.formatSets(completedSets != null ? completedSets.size() : 0));
+            tvCompletedExerciseReps.setText(strCompletedReps);
+            tvCompletedExerciseWeight.setText(strCompletedWeights);
         }
     }
 
@@ -125,9 +139,12 @@ public class LiftAdapter extends RecyclerView.Adapter<LiftAdapter.LiftViewHolder
     public class LiftViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
-        @BindView(R.id.tv_exercise_set) public TextView tvExerciseSet;
-        @BindView(R.id.tv_exercise_reps) public TextView tvExerciseReps;
-        @BindView(R.id.tv_exercise_weight) public TextView tvExerciseWeight;
+        @BindView(R.id.tv_completed_exercise_set) public TextView tvCompletedExerciseSet;
+        @BindView(R.id.tv_completed_exercise_reps) public TextView tvCompletedExerciseReps;
+        @BindView(R.id.tv_completed_exercise_weight) public TextView tvCompletedExerciseWeight;
+        @BindView(R.id.tv_target_exercise_set) public TextView tvTargetExerciseSet;
+        @BindView(R.id.tv_target_exercise_reps) public TextView tvTargetExerciseReps;
+        @BindView(R.id.tv_target_exercise_weight) public TextView tvTargetExerciseWeight;
 
         public LiftViewHolder(View itemView) {
             super(itemView);

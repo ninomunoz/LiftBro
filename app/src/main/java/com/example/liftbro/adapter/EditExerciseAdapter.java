@@ -149,9 +149,9 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
-        @BindView(R.id.tv_exercise_set) public TextView tvExerciseSet;
-        @BindView(R.id.tv_exercise_reps) public TextView tvExerciseReps;
-        @BindView(R.id.tv_exercise_weight) public TextView tvExerciseWeight;
+        @BindView(R.id.tv_completed_exercise_set) public TextView tvExerciseSet;
+        @BindView(R.id.tv_completed_exercise_reps) public TextView tvExerciseReps;
+        @BindView(R.id.tv_completed_exercise_weight) public TextView tvExerciseWeight;
         @BindView(R.id.view_background) public RelativeLayout viewBackground;
         @BindView(R.id.view_foreground) public RelativeLayout viewForeground;
         @BindView(R.id.handle) public ImageView ivHandle;
