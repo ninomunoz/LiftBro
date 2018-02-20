@@ -62,29 +62,29 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
-        TextView tvExerciseSet = holder.tvExerciseSet;
-        TextView tvExerciseReps = holder.tvExerciseReps;
-        TextView tvExerciseWeight = holder.tvExerciseWeight;
+        TextView tvTargetSets = holder.tvTargetSets;
+        TextView tvTargetReps = holder.tvTargetReps;
+        TextView tvTargetWeightTime = holder.tvTargetWeightTime;
 
         tvExerciseName.setText(name);
         tvExerciseName.setContentDescription(name);
 
         if (time > 0) {
-            tvExerciseSet.setVisibility(View.GONE);
-            tvExerciseReps.setVisibility(View.GONE);
+            tvTargetSets.setVisibility(View.GONE);
+            tvTargetReps.setVisibility(View.GONE);
 
             String timeText = FormatUtil.formatTime(mContext, time, true);
-            tvExerciseWeight.setText(timeText);
-            tvExerciseWeight.setContentDescription(timeText);
+            tvTargetWeightTime.setText(timeText);
+            tvTargetWeightTime.setContentDescription(timeText);
         }
         else {
-            tvExerciseSet.setText(FormatUtil.formatSets(sets));
-            tvExerciseSet.setContentDescription(FormatUtil.formatSetsContentDescription(mContext, sets));
-            tvExerciseReps.setText(FormatUtil.formatReps(reps));
-            tvExerciseReps.setContentDescription(FormatUtil.formatRepsContentDescription(mContext, reps));
+            tvTargetSets.setText(FormatUtil.formatSets(sets));
+            tvTargetSets.setContentDescription(FormatUtil.formatSetsContentDescription(mContext, sets));
+            tvTargetReps.setText(FormatUtil.formatReps(reps));
+            tvTargetReps.setContentDescription(FormatUtil.formatRepsContentDescription(mContext, reps));
             String weightText = FormatUtil.formatWeight(mContext, weight, true);
-            tvExerciseWeight.setText(weightText);
-            tvExerciseWeight.setContentDescription(weightText);
+            tvTargetWeightTime.setText(weightText);
+            tvTargetWeightTime.setContentDescription(weightText);
         }
 
         holder.ivHandle.setOnTouchListener(new View.OnTouchListener() {
@@ -149,9 +149,12 @@ public class EditExerciseAdapter extends RecyclerView.Adapter<EditExerciseAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
-        @BindView(R.id.tv_completed_exercise_set) public TextView tvExerciseSet;
-        @BindView(R.id.tv_completed_exercise_reps) public TextView tvExerciseReps;
-        @BindView(R.id.tv_completed_exercise_weight) public TextView tvExerciseWeight;
+        @BindView(R.id.tv_last_sets) public TextView tvLastSets;
+        @BindView(R.id.tv_last_reps) public TextView tvLastReps;
+        @BindView(R.id.tv_last_weight_time) public TextView tvLastWeightTime;
+        @BindView(R.id.tv_target_sets) public TextView tvTargetSets;
+        @BindView(R.id.tv_target_reps) public TextView tvTargetReps;
+        @BindView(R.id.tv_target_weight_time) public TextView tvTargetWeightTime;
         @BindView(R.id.view_background) public RelativeLayout viewBackground;
         @BindView(R.id.view_foreground) public RelativeLayout viewForeground;
         @BindView(R.id.handle) public ImageView ivHandle;

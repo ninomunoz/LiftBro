@@ -61,23 +61,50 @@
                 android:layout_gravity="center_vertical"/>
 
             <LinearLayout
-                android:id="@+id/ll_sets_reps_weight"
+                android:id="@+id/ll_last_sets_reps_weight_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tv_last_sets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S: 0"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tv_last_reps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R: -/-/-"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tv_last_weight_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="W: -/-/-"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_target_sets_reps_weight_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/tv_completed_exercise_set"
+                    android:id="@+id/tv_target_sets"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp" />
                 <TextView
-                    android:id="@+id/tv_completed_exercise_reps"
+                    android:id="@+id/tv_target_reps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp" />
                 <TextView
-                    android:id="@id/tv_completed_exercise_weight"
+                    android:id="@id/tv_target_weight_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp" />

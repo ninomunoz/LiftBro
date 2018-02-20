@@ -23,7 +23,7 @@ import static com.example.liftbro.data.LiftContract.ExerciseEntry;
  */
 
 public class ExerciseAdapter extends
-        RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
+        RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
 
     Context mContext;
     Cursor mCursor;
@@ -33,13 +33,13 @@ public class ExerciseAdapter extends
     }
 
     @Override
-    public ExerciseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_exercise, parent, false);
-        return new ExerciseViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ExerciseViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         // Get the data model based on position
         mCursor.moveToPosition(position);
 
@@ -72,30 +72,30 @@ public class ExerciseAdapter extends
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
-        TextView tvExerciseSet = holder.tvExerciseSet;
-        TextView tvExerciseReps = holder.tvExerciseReps;
-        TextView tvExerciseWeight = holder.tvExerciseWeight;
+        TextView tvTargetSets = holder.tvTargetSets;
+        TextView tvTargetReps = holder.tvTargetReps;
+        TextView tvTargetWeightTime = holder.tvTargetWeightTime;
 
         tvExerciseName.setText(name);
         tvExerciseName.setContentDescription(name);
 
         if (time > 0) {
-            tvExerciseSet.setVisibility(View.GONE);
-            tvExerciseReps.setVisibility(View.GONE);
+            tvTargetSets.setVisibility(View.GONE);
+            tvTargetReps.setVisibility(View.GONE);
 
             String timeText = FormatUtil.formatTime(mContext, time, true);
-            tvExerciseWeight.setText(timeText);
-            tvExerciseWeight.setContentDescription(timeText);
+            tvTargetWeightTime.setText(timeText);
+            tvTargetWeightTime.setContentDescription(timeText);
         }
         else {
-            tvExerciseSet.setText(FormatUtil.formatSets(sets));
-            tvExerciseSet.setContentDescription(FormatUtil.formatSetsContentDescription(mContext, sets));
-            tvExerciseReps.setText(FormatUtil.formatReps(reps));
-            tvExerciseReps.setContentDescription(FormatUtil.formatRepsContentDescription(mContext, reps));
+            tvTargetSets.setText(FormatUtil.formatSets(sets));
+            tvTargetSets.setContentDescription(FormatUtil.formatSetsContentDescription(mContext, sets));
+            tvTargetReps.setText(FormatUtil.formatReps(reps));
+            tvTargetReps.setContentDescription(FormatUtil.formatRepsContentDescription(mContext, reps));
 
             String weightText = FormatUtil.formatWeight(mContext, weight, true);
-            tvExerciseWeight.setText(weightText);
-            tvExerciseWeight.setContentDescription(weightText);
+            tvTargetWeightTime.setText(weightText);
+            tvTargetWeightTime.setContentDescription(weightText);
         }
     }
 
@@ -124,14 +124,17 @@ public class ExerciseAdapter extends
         notifyDataSetChanged();
     }
 
-    public class ExerciseViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
-        @BindView(R.id.tv_target_exercise_set) public TextView tvExerciseSet;
-        @BindView(R.id.tv_target_exercise_reps) public TextView tvExerciseReps;
-        @BindView(R.id.tv_target_exercise_weight) public TextView tvExerciseWeight;
+        @BindView(R.id.tv_last_sets) public TextView tvLastSets;
+        @BindView(R.id.tv_last_reps) public TextView tvLastReps;
+        @BindView(R.id.tv_last_weight_time) public TextView tvLastWeightTime;
+        @BindView(R.id.tv_target_sets) public TextView tvTargetSets;
+        @BindView(R.id.tv_target_reps) public TextView tvTargetReps;
+        @BindView(R.id.tv_target_weight_time) public TextView tvTargetWeightTime;
 
-        public ExerciseViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

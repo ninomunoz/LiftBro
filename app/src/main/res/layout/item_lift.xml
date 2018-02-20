@@ -14,53 +14,53 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="3" />
 
-        <LinearLayout
-            android:id="@+id/ll_target_sets_reps_weight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
+    <LinearLayout
+        android:id="@+id/ll_target_sets_reps_weight_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tv_target_exercise_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/tv_target_exercise_reps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/tv_target_exercise_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_completed_sets_reps_weight"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_target_sets"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
-            <TextView
-                android:id="@+id/tv_completed_exercise_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/tv_completed_exercise_reps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/tv_completed_exercise_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_target_reps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_target_weight_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_actual_sets_reps_weight_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tv_actual_sets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_actual_reps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_actual_weight_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </LinearLayout>

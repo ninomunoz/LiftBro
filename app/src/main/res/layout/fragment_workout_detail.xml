@@ -1,26 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.liftbro.activity.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_start_workout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_dumbbell"
-        android:contentDescription="Start Workout"
-        android:tint="@android:color/white" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_exercises"
+    <LinearLayout
+        android:id="@+id/workout_detail_column_labels"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        android:paddingBottom="80dp"
-        android:clipToPadding="false" />
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Last"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="@string/target"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_below="@id/workout_detail_column_labels"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_start_workout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_dumbbell"
+            android:contentDescription="Start Workout"
+            android:tint="@android:color/white" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/rv_exercises"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false" />
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

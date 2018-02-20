@@ -88,33 +88,33 @@ public class LiftAdapter extends RecyclerView.Adapter<LiftAdapter.LiftViewHolder
 
         // Set item views based on your views and data model
         TextView tvExerciseName = holder.tvExerciseName;
-        TextView tvTargetExerciseSet = holder.tvTargetExerciseSet;
-        TextView tvTargetExerciseReps = holder.tvTargetExerciseReps;
-        TextView tvTargetExerciseWeight = holder.tvTargetExerciseWeight;
-        TextView tvCompletedExerciseSet = holder.tvCompletedExerciseSet;
-        TextView tvCompletedExerciseReps = holder.tvCompletedExerciseReps;
-        TextView tvCompletedExerciseWeight = holder.tvCompletedExerciseWeight;
+        TextView tvTargetSets = holder.tvTargetSets;
+        TextView tvTargetReps = holder.tvTargetReps;
+        TextView tvTargetWeightTime = holder.tvTargetWeightTime;
+        TextView tvActualSets = holder.tvActualSets;
+        TextView tvActualReps = holder.tvActualReps;
+        TextView tvActualWeightTime = holder.tvActualWeightTime;
 
         tvExerciseName.setText(name);
         tvExerciseName.setContentDescription(name);
 
         if (isTimedExercise) {
-            tvTargetExerciseSet.setVisibility(View.GONE);
-            tvTargetExerciseReps.setVisibility(View.GONE);
-            tvTargetExerciseWeight.setText(FormatUtil.formatTime(mContext, targetTime, true));
+            tvTargetSets.setVisibility(View.GONE);
+            tvTargetReps.setVisibility(View.GONE);
+            tvTargetWeightTime.setText(FormatUtil.formatTime(mContext, targetTime, true));
 
-            tvCompletedExerciseSet.setVisibility(View.GONE);
-            tvCompletedExerciseReps.setVisibility(View.GONE);
-            tvCompletedExerciseWeight.setText(strCompletedTime);
+            tvActualSets.setVisibility(View.GONE);
+            tvActualReps.setVisibility(View.GONE);
+            tvActualWeightTime.setText(strCompletedTime);
         }
         else {
-            tvTargetExerciseSet.setText(FormatUtil.formatSets(targetSets));
-            tvTargetExerciseReps.setText(FormatUtil.formatReps(targetReps));
-            tvTargetExerciseWeight.setText(FormatUtil.formatWeight(mContext, targetWeight, true));
+            tvTargetSets.setText(FormatUtil.formatSets(targetSets));
+            tvTargetReps.setText(FormatUtil.formatReps(targetReps));
+            tvTargetWeightTime.setText(FormatUtil.formatWeight(mContext, targetWeight, true));
 
-            tvCompletedExerciseSet.setText(FormatUtil.formatSets(completedSets != null ? completedSets.size() : 0));
-            tvCompletedExerciseReps.setText(strCompletedReps);
-            tvCompletedExerciseWeight.setText(strCompletedWeights);
+            tvActualSets.setText(FormatUtil.formatSets(completedSets != null ? completedSets.size() : 0));
+            tvActualReps.setText(strCompletedReps);
+            tvActualWeightTime.setText(strCompletedWeights);
         }
     }
 
@@ -139,12 +139,12 @@ public class LiftAdapter extends RecyclerView.Adapter<LiftAdapter.LiftViewHolder
     public class LiftViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
-        @BindView(R.id.tv_completed_exercise_set) public TextView tvCompletedExerciseSet;
-        @BindView(R.id.tv_completed_exercise_reps) public TextView tvCompletedExerciseReps;
-        @BindView(R.id.tv_completed_exercise_weight) public TextView tvCompletedExerciseWeight;
-        @BindView(R.id.tv_target_exercise_set) public TextView tvTargetExerciseSet;
-        @BindView(R.id.tv_target_exercise_reps) public TextView tvTargetExerciseReps;
-        @BindView(R.id.tv_target_exercise_weight) public TextView tvTargetExerciseWeight;
+        @BindView(R.id.tv_actual_sets) public TextView tvActualSets;
+        @BindView(R.id.tv_actual_reps) public TextView tvActualReps;
+        @BindView(R.id.tv_actual_weight_time) public TextView tvActualWeightTime;
+        @BindView(R.id.tv_target_sets) public TextView tvTargetSets;
+        @BindView(R.id.tv_target_reps) public TextView tvTargetReps;
+        @BindView(R.id.tv_target_weight_time) public TextView tvTargetWeightTime;
 
         public LiftViewHolder(View itemView) {
             super(itemView);
