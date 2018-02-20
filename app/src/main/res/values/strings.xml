@@ -57,7 +57,7 @@
 
     <!-- LiftFragment -->
     <string name="target">Target</string>
-    <string name="completed">Completed</string>
+    <string name="actual">Actual</string>
 
     <!-- Arrays -->
     <string-array name="np_time_array">

@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:text="@string/completed"
+            android:text="@string/actual"
             android:textSize="14sp" />
     </LinearLayout>
 
