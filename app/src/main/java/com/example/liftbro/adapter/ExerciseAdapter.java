@@ -127,9 +127,9 @@ public class ExerciseAdapter extends
     public class ExerciseViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_exercise_name) public TextView tvExerciseName;
-        @BindView(R.id.tv_completed_exercise_set) public TextView tvExerciseSet;
-        @BindView(R.id.tv_completed_exercise_reps) public TextView tvExerciseReps;
-        @BindView(R.id.tv_completed_exercise_weight) public TextView tvExerciseWeight;
+        @BindView(R.id.tv_target_exercise_set) public TextView tvExerciseSet;
+        @BindView(R.id.tv_target_exercise_reps) public TextView tvExerciseReps;
+        @BindView(R.id.tv_target_exercise_weight) public TextView tvExerciseWeight;
 
         public ExerciseViewHolder(View itemView) {
             super(itemView);

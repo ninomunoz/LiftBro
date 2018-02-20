@@ -11,20 +11,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:layout_weight="2" />
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="4dp"
-        android:layout_weight="1">
+        android:layout_weight="3" />
 
         <LinearLayout
             android:id="@+id/ll_target_sets_reps_weight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_alignParentStart="true"
+            android:layout_weight="1"
             android:gravity="center_vertical">
 
             <TextView
@@ -46,9 +40,9 @@
 
         <LinearLayout
             android:id="@+id/ll_completed_sets_reps_weight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_vertical">
 
@@ -68,7 +62,5 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp" />
         </LinearLayout>
-
-    </RelativeLayout>
 
 </LinearLayout>
