@@ -55,6 +55,10 @@
     <string name="stop">STOP</string>
     <string name="reset">RESET</string>
 
+    <!-- LiftFragment -->
+    <string name="target">Target</string>
+    <string name="completed">Completed</string>
+
     <!-- Arrays -->
     <string-array name="np_time_array">
         <item>sec</item>

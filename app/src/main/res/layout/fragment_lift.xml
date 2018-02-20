@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Target"
+            android:text="@string/target"
             android:textStyle="bold"
             android:textSize="14sp" />
         <TextView
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:text="Completed"
+            android:text="@string/completed"
             android:textSize="14sp" />
     </LinearLayout>
 
